@@ -6,7 +6,7 @@ namespace DadSimulator
 {
     class MovingObject : StationaryObject
     {
-        private float m_speed;
+        private readonly float m_speed;
 
         public MovingObject(Texture2D texture2D, Vector2 startPosition, RelativePosition relativePosition, float speed) 
             : base(texture2D, startPosition, relativePosition)
