@@ -1,15 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
-namespace DadSimulator
+namespace DadSimulator.GraphicObjects
 {
-    class MovingObject : StationaryObject
+    public class MovingObject : StationaryObject
     {
         private readonly float m_speed;
         private IMovementCommand m_movement;
 
-        public MovingObject(Texture2D texture2D, Vector2 startPosition, RelativePosition relativePosition, 
+        public MovingObject(Texture2D texture2D, Vector2 startPosition, RelativePositionReference relativePosition, 
             float speed, IMovementCommand movement) 
             : base(texture2D, startPosition, relativePosition)
         {

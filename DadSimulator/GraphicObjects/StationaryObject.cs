@@ -1,30 +1,38 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
-
-namespace DadSimulator
+namespace DadSimulator.GraphicObjects
 {
-    enum RelativePosition { TopLeft, Centered };
+    public enum RelativePositionReference { TopLeft, Centered };
 
-    class StationaryObject : IGraphicObject
+    public class StationaryObject : IGraphicObject
     {
-        protected Texture2D m_texture;
         protected Vector2 m_position;
+        protected Texture2D m_texture;
         protected Vector2 m_relPosition;
 
-        public StationaryObject(Texture2D texture2D, Vector2 position, RelativePosition relativePosition)
+        /// <summary>
+        /// Get the world position of the texture.
+        /// </summary>
+        public Vector2 Position { get => m_position; }
+        /// <summary>
+        /// Get the position of the texture in the local coordinate system.
+        /// </summary>
+        public Vector2 RelativePosition { get => m_relPosition; }
+
+        public StationaryObject(Texture2D texture2D, Vector2 position, RelativePositionReference relativePosition)
         {
             m_texture = texture2D;
             m_position = position;
 
             switch (relativePosition)
             {
-                case RelativePosition.Centered:
+                case RelativePositionReference.Centered:
                     m_relPosition = new Vector2(m_texture.Width / 2, m_texture.Height / 2);
                     break;
-                case RelativePosition.TopLeft:
+                case RelativePositionReference.TopLeft:
                 default:
-                    m_relPosition = Vector2.One;
+                    m_relPosition = Vector2.Zero;
                     break;
             }
         }

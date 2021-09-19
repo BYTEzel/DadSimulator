@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 
-namespace DadSimulator
+namespace DadSimulator.GraphicObjects
 {
-    interface IGraphicObject
+    public interface IGraphicObject
     {
         void Initialize();
         void Update(double elapsedTime);

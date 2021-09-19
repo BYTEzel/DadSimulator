@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DadSimulator
+namespace DadSimulator.GraphicObjects
 {
     class KeyboardMovement : IMovementCommand
     {
