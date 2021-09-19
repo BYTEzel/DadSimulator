@@ -7,11 +7,14 @@ namespace DadSimulator
     class MovingObject : StationaryObject
     {
         private readonly float m_speed;
+        private IMovementCommand m_movement;
 
-        public MovingObject(Texture2D texture2D, Vector2 startPosition, RelativePosition relativePosition, float speed) 
+        public MovingObject(Texture2D texture2D, Vector2 startPosition, RelativePosition relativePosition, 
+            float speed, IMovementCommand movement) 
             : base(texture2D, startPosition, relativePosition)
         {
             m_speed = speed;
+            m_movement = movement;
         }
 
         public override void Initialize()
@@ -21,19 +24,28 @@ namespace DadSimulator
 
         public override void Update(double elapsedTime)
         {
-            var kstate = Keyboard.GetState();
+            var movements = m_movement.GetDirections();
 
-            if (kstate.IsKeyDown(Keys.Up))
-                m_position.Y -= m_speed * (float)elapsedTime;
-
-            if (kstate.IsKeyDown(Keys.Down))
-                m_position.Y += m_speed * (float)elapsedTime;
-
-            if (kstate.IsKeyDown(Keys.Left))
-                m_position.X -= m_speed * (float)elapsedTime;
-
-            if (kstate.IsKeyDown(Keys.Right))
-                m_position.X += m_speed * (float)elapsedTime;
+            foreach (var mov in movements)
+            {
+                switch (mov)
+                {
+                    case Directions.Up:
+                        m_position.Y -= m_speed * (float)elapsedTime;
+                        break;
+                    case Directions.Right:
+                        m_position.X += m_speed * (float)elapsedTime;
+                        break;
+                    case Directions.Down:
+                        m_position.Y += m_speed * (float)elapsedTime;
+                        break;
+                    case Directions.Left:
+                        m_position.X -= m_speed * (float)elapsedTime;
+                        break;
+                    default:
+                        break;
+                }
+            }
 
             base.Update(elapsedTime);
         }

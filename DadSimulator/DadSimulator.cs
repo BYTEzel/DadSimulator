@@ -26,7 +26,7 @@ namespace DadSimulator
         protected override void LoadContent()
         {
             m_spriteBatch = new SpriteBatch(GraphicsDevice);
-            m_player = new MovingObject(Content.Load<Texture2D>("Smiley"), new Vector2(200, 200), RelativePosition.Centered, 100f);
+            m_player = new MovingObject(Content.Load<Texture2D>("Smiley"), new Vector2(200, 200), RelativePosition.Centered, 100f, new KeyboardMovement());
 
             // TODO: use this.Content to load your game content here
         }
