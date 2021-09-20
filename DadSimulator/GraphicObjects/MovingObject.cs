@@ -24,7 +24,7 @@ namespace DadSimulator.GraphicObjects
         public override void Update(double elapsedTime)
         {
             var movements = m_movement.GetDirections();
-
+            
             foreach (var mov in movements)
             {
                 switch (mov)
