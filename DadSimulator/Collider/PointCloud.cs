@@ -5,7 +5,8 @@ namespace DadSimulator.Collider
 {
     public struct PointCloud
     {
-        List<Point> Points;
-        Vector2 Shift;
+        public string Id;
+        public List<Point> PointsInOrigin;
+        public Vector2 Shift;
     }
 }
