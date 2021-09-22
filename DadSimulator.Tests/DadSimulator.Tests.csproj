@@ -17,10 +17,4 @@
     <ProjectReference Include="..\DadSimulator\DadSimulator.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="Data\test-blank.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

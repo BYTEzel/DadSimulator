@@ -48,14 +48,14 @@ namespace DadSimulator.Tests
         [Test]
         public void Padding()
         {
-            // While padding, the resulting rect is expected to be smaller than with padding = 0 (default)
+            // While padding, the resulting rect is expected to be larger than with padding = 0 (default)
             var rectWithoutPadding = new Rectangle(2, 2, 8, 8);            
             var collider = new RectangleCollider(rectWithoutPadding, Vector2.Zero, 2);
             var alignedPoints = collider.GetAlignedPoints();
-            Assert.Greater(1, alignedPoints.PointsInOrigin.Where(p => p.X < rectWithoutPadding.X).Count());
-            Assert.Greater(1, alignedPoints.PointsInOrigin.Where(p => p.X < rectWithoutPadding.Width).Count());
-            Assert.Greater(1, alignedPoints.PointsInOrigin.Where(p => p.Y < rectWithoutPadding.Y).Count());
-            Assert.Greater(1, alignedPoints.PointsInOrigin.Where(p => p.Y < rectWithoutPadding.Height).Count());
+            Assert.IsNotEmpty(alignedPoints.PointsInOrigin.Where(p => p.X < rectWithoutPadding.X));
+            Assert.IsNotEmpty(alignedPoints.PointsInOrigin.Where(p => p.X < rectWithoutPadding.Width));
+            Assert.IsNotEmpty(alignedPoints.PointsInOrigin.Where(p => p.Y < rectWithoutPadding.Y));
+            Assert.IsNotEmpty(alignedPoints.PointsInOrigin.Where(p => p.Y < rectWithoutPadding.Height));
         }
 
         [Test]

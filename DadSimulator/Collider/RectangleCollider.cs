@@ -34,7 +34,7 @@ namespace DadSimulator.Collider
             {
                 throw new System.ArgumentException("Padding is larger than the target rectangle.");
             }
-            m_rect = new Rectangle((int)shift.X - padding, (int)shift.Y - padding, rect.Width + padding, rect.Height + padding);
+            m_rect = new Rectangle(rect.X + (int)shift.X - padding, rect.Y + (int)shift.Y - padding, rect.Width + padding, rect.Height + padding);
         }
 
         private void ComputePointCloud()
