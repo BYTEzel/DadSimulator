@@ -10,18 +10,27 @@ namespace DadSimulator.Collider
 
         public RectangleCollider(Rectangle rect, Vector2 shift, int padding = 0)
         {
+            AssignRectangle(rect, shift, padding);
             m_pointCloud = new PointCloud();
             m_pointCloud.Shift = shift;
             ComputePointCloud();
+        }
+
+        private void AssignRectangle(Rectangle rect, Vector2 shift, int padding)
+        {
+            if (padding >= rect.Height && padding >= rect.Width)
+            {
+                throw new System.ArgumentException("Padding is larger than the target rectangle.");
+            }
             m_rect = new Rectangle((int)shift.X + padding, (int)shift.Y + padding, rect.Width - padding, rect.Height - padding);
         }
 
         private void ComputePointCloud()
         {
             m_pointCloud.PointsInOrigin = new List<Point>();
-            for (int x = 0; x < m_rect.Width; x++)
+            for (int x = m_rect.X; x < m_rect.Width; x++)
             {
-                for (int y = 0; y < m_rect.Height; y++)
+                for (int y = m_rect.Y; y < m_rect.Height; y++)
                 {
                     m_pointCloud.PointsInOrigin.Add(new Point(x, y));
                 }
