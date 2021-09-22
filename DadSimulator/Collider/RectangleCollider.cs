@@ -42,7 +42,7 @@ namespace DadSimulator.Collider
             return m_pointCloud;
         }
 
-        public IEnumerable<PointCloud> Intersection(IEnumerable<PointCloud> pointClouds)
+        public List<PointCloud> Intersection(IEnumerable<PointCloud> pointClouds)
         {
             var intersectingPcs = new List<PointCloud>();
             var shiftedRect = new Rectangle(m_rect.X + (int)m_pointCloud.Shift.X, m_rect.Y + (int)m_pointCloud.Shift.Y, m_rect.Width, m_rect.Height);

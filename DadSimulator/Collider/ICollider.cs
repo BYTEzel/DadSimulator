@@ -23,6 +23,6 @@ namespace DadSimulator.Collider
         /// </summary>
         /// <param name="pointClouds">Points, to which the current point cloud is compared to.</param>
         /// <returns>A list of intersecting points.</returns>
-        IEnumerable<PointCloud> Intersection(IEnumerable<PointCloud> pointClouds);
+        List<PointCloud> Intersection(IEnumerable<PointCloud> pointClouds);
     }
 }
