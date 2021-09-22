@@ -26,7 +26,6 @@ namespace DadSimulator.Collider
                     m_pointCloud.PointsInOrigin.Add(new Point(x, y));
                 }
             }
-
         }
 
         public PointCloud GetAlignedPoints()
@@ -37,6 +36,7 @@ namespace DadSimulator.Collider
         public IEnumerable<PointCloud> Intersection(IEnumerable<PointCloud> pointClouds)
         {
             var intersectingPcs = new List<PointCloud>();
+            var shiftedRect = new Rectangle(m_rect.X + (int)m_pointCloud.Shift.X, m_rect.Y + (int)m_pointCloud.Shift.Y, m_rect.Width, m_rect.Height);
             foreach (var pc in pointClouds)
             {
                 var intersectingPc = new PointCloud();
@@ -46,7 +46,7 @@ namespace DadSimulator.Collider
 
                 foreach (var point in pc.PointsInOrigin)
                 {
-                    if (m_rect.Contains(point))
+                    if (shiftedRect.Contains(point))
                     {
                         intersectingPc.PointsInOrigin.Add(point);
                     }
