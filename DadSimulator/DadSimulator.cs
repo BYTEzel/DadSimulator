@@ -1,4 +1,5 @@
-﻿using DadSimulator.GraphicObjects;
+﻿using DadSimulator.Collider;
+using DadSimulator.GraphicObjects;
 using DadSimulator.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -11,6 +12,7 @@ namespace DadSimulator
         private GraphicsDeviceManager m_graphics;
         private SpriteBatch m_spriteBatch;
         private MovingObject m_player;
+        private StationaryObject m_obstacle;
 
         public DadSimulator()
         {
@@ -29,6 +31,9 @@ namespace DadSimulator
         {
             m_spriteBatch = new SpriteBatch(GraphicsDevice);
             m_player = new MovingObject(Content.Load<Texture2D>("Smiley"), new Vector2(200, 200), RelativePositionReference.Centered, 100f, new KeyboardMovement());
+            m_obstacle = new StationaryObject(Content.Load<Texture2D>("Test/test-blank"), new Vector2(500, 500), RelativePositionReference.Centered);
+
+
 
             // TODO: use this.Content to load your game content here
         }
@@ -39,7 +44,9 @@ namespace DadSimulator
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            m_player.Update(gameTime.ElapsedGameTime.TotalSeconds);
+            var gameSeconds = gameTime.ElapsedGameTime.TotalSeconds;
+            m_player.Update(gameSeconds);
+            m_obstacle.Update(gameSeconds);
 
             // TODO: Add your update logic here
 
@@ -53,6 +60,7 @@ namespace DadSimulator
             // TODO: Add your drawing code here
             m_spriteBatch.Begin();
             m_player.Draw(m_spriteBatch);
+            m_obstacle.Draw(m_spriteBatch);
             m_spriteBatch.End();
             
 

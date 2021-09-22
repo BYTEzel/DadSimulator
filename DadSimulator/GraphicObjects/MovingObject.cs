@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using DadSimulator.Collider;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace DadSimulator.GraphicObjects
@@ -7,13 +8,15 @@ namespace DadSimulator.GraphicObjects
     {
         private readonly float m_speed;
         private IMovementCommand m_movement;
+        
 
         public MovingObject(Texture2D texture2D, Vector2 startPosition, RelativePositionReference relativePosition, 
-            float speed, IMovementCommand movement) 
-            : base(texture2D, startPosition, relativePosition)
+            float speed, IMovementCommand movement, ICollider collider = null) 
+            : base(texture2D, startPosition, relativePosition, collider)
         {
             m_speed = speed;
             m_movement = movement;
+            m_collider = collider;
         }
 
         public override void Initialize()

@@ -3,11 +3,26 @@ using NUnit.Framework;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Linq;
+using DadSimulator.IO;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace DadSimulator.Tests
 {
     public class RectangleColliderTest
     {
+        private Texture2D m_texture;
+
+        [SetUp]
+        public void Setup()
+        {
+            using (var sim = new DadSimulator())
+            {
+                sim.RunOneFrame();
+                ITemplateLoader loader = sim;
+                m_texture = loader.LoadTemplate(Templates.Test);
+            }
+        }
+
         [Test]
         public void NoIntersection()
         {
@@ -34,13 +49,13 @@ namespace DadSimulator.Tests
         public void Padding()
         {
             // While padding, the resulting rect is expected to be smaller than with padding = 0 (default)
-            var rectWithoutPadding = new Rectangle(0, 0, 10, 10);            
+            var rectWithoutPadding = new Rectangle(2, 2, 8, 8);            
             var collider = new RectangleCollider(rectWithoutPadding, Vector2.Zero, 2);
             var alignedPoints = collider.GetAlignedPoints();
-            Assert.IsEmpty(alignedPoints.PointsInOrigin.Where(p => p.X <= rectWithoutPadding.X));
-            Assert.IsEmpty(alignedPoints.PointsInOrigin.Where(p => p.X >= rectWithoutPadding.Width));
-            Assert.IsEmpty(alignedPoints.PointsInOrigin.Where(p => p.Y <= rectWithoutPadding.Y));
-            Assert.IsEmpty(alignedPoints.PointsInOrigin.Where(p => p.Y >= rectWithoutPadding.Height));
+            Assert.Greater(1, alignedPoints.PointsInOrigin.Where(p => p.X < rectWithoutPadding.X).Count());
+            Assert.Greater(1, alignedPoints.PointsInOrigin.Where(p => p.X < rectWithoutPadding.Width).Count());
+            Assert.Greater(1, alignedPoints.PointsInOrigin.Where(p => p.Y < rectWithoutPadding.Y).Count());
+            Assert.Greater(1, alignedPoints.PointsInOrigin.Where(p => p.Y < rectWithoutPadding.Height).Count());
         }
 
         [Test]
@@ -74,6 +89,18 @@ namespace DadSimulator.Tests
                 }
             }
         }
+
+        [Test]
+        public void TextureInitialization()
+        {
+            var collider = new RectangleCollider(m_texture, Vector2.Zero);
+            var alignedPoints = collider.GetAlignedPoints();
+            Assert.IsEmpty(alignedPoints.PointsInOrigin.Where(p => p.X < 0));
+            Assert.IsEmpty(alignedPoints.PointsInOrigin.Where(p => p.X > m_texture.Width));
+            Assert.IsEmpty(alignedPoints.PointsInOrigin.Where(p => p.Y < 0));
+            Assert.IsEmpty(alignedPoints.PointsInOrigin.Where(p => p.Y > m_texture.Height));
+        }
+
 
         private static List<PointCloud> CreatePointCloudBetween0and100()
         {

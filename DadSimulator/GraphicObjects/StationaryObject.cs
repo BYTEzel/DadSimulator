@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using DadSimulator.Collider;
 
 namespace DadSimulator.GraphicObjects
 {
@@ -10,6 +11,7 @@ namespace DadSimulator.GraphicObjects
         protected Vector2 m_position;
         protected Texture2D m_texture;
         protected Vector2 m_relPosition;
+        protected ICollider m_collider;
 
         /// <summary>
         /// Get the world position of the texture.
@@ -20,10 +22,19 @@ namespace DadSimulator.GraphicObjects
         /// </summary>
         public Vector2 RelativePosition { get => m_relPosition; }
 
-        public StationaryObject(Texture2D texture2D, Vector2 position, RelativePositionReference relativePosition)
+        public StationaryObject(Texture2D texture2D, Vector2 position, RelativePositionReference relativePosition, ICollider collider = null)
         {
             m_texture = texture2D;
             m_position = position;
+
+            if (collider != null)
+            {
+                m_collider = collider;
+            }
+            else
+            {
+                m_collider = new RectangleCollider(texture2D, position);
+            }
 
             switch (relativePosition)
             {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
 namespace DadSimulator.Collider
@@ -9,6 +10,17 @@ namespace DadSimulator.Collider
         private PointCloud m_pointCloud;
 
         public RectangleCollider(Rectangle rect, Vector2 shift, int padding = 0)
+        {
+            AssignCtorValues(rect, shift, padding);
+        }
+
+        public RectangleCollider(Texture2D texture, Vector2 shift, int padding = 0)
+        {
+            var rect = new Rectangle(Point.Zero, new Point(texture.Width, texture.Height));
+            AssignCtorValues(rect, shift, padding);
+        }
+
+        private void AssignCtorValues(Rectangle rect, Vector2 shift, int padding)
         {
             AssignRectangle(rect, shift, padding);
             m_pointCloud = new PointCloud();
@@ -22,7 +34,7 @@ namespace DadSimulator.Collider
             {
                 throw new System.ArgumentException("Padding is larger than the target rectangle.");
             }
-            m_rect = new Rectangle((int)shift.X + padding, (int)shift.Y + padding, rect.Width - padding, rect.Height - padding);
+            m_rect = new Rectangle((int)shift.X - padding, (int)shift.Y - padding, rect.Width + padding, rect.Height + padding);
         }
 
         private void ComputePointCloud()
