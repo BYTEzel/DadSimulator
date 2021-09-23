@@ -9,21 +9,22 @@ namespace DadSimulator.Collider
         private Rectangle m_rect;
         private PointCloud m_pointCloud;
 
-        public RectangleCollider(Rectangle rect, Vector2 shift, int padding = 0)
+        public RectangleCollider(string id, Rectangle rect, Vector2 shift, int padding = 0)
         {
-            AssignCtorValues(rect, shift, padding);
+            AssignCtorValues(id, rect, shift, padding);
         }
 
-        public RectangleCollider(Texture2D texture, Vector2 shift, int padding = 0)
+        public RectangleCollider(string id, Texture2D texture, Vector2 shift, int padding = 0)
         {
             var rect = new Rectangle(Point.Zero, new Point(texture.Width, texture.Height));
-            AssignCtorValues(rect, shift, padding);
+            AssignCtorValues(id, rect, shift, padding);
         }
 
-        private void AssignCtorValues(Rectangle rect, Vector2 shift, int padding)
+        private void AssignCtorValues(string id, Rectangle rect, Vector2 shift, int padding)
         {
             AssignRectangle(rect, shift, padding);
             m_pointCloud = new PointCloud();
+            m_pointCloud.Id = id;
             m_pointCloud.Shift = shift;
             ComputePointCloud();
         }

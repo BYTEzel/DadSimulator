@@ -22,7 +22,7 @@ namespace DadSimulator.GraphicObjects
         /// </summary>
         public Vector2 RelativePosition { get => m_relPosition; }
 
-        public StationaryObject(Texture2D texture2D, Vector2 position, RelativePositionReference relativePosition, ICollider collider = null)
+        public StationaryObject(string id, Texture2D texture2D, Vector2 position, RelativePositionReference relativePosition, ICollider collider = null)
         {
             m_texture = texture2D;
             m_position = position;
