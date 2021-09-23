@@ -4,37 +4,36 @@ using System.Collections.Generic;
 
 namespace DadSimulator.Collider
 {
-    public class RectangleCollider : ICollidable
+    public class RectangleCollider : ICollider
     {
         private Rectangle m_rect;
         private PointCloud m_pointCloud;
 
-        public RectangleCollider(string id, Rectangle rect, Vector2 shift, int padding = 0)
+        public RectangleCollider(Rectangle rect, int padding = 0)
         {
-            AssignCtorValues(id, rect, shift, padding);
+            AssignCtorValues(rect, padding);
         }
 
-        public RectangleCollider(string id, Texture2D texture, Vector2 shift, int padding = 0)
+        public RectangleCollider(Texture2D texture, int padding = 0)
         {
             var rect = new Rectangle(Point.Zero, new Point(texture.Width, texture.Height));
-            AssignCtorValues(id, rect, shift, padding);
+            AssignCtorValues(rect, padding);
         }
 
-        private void AssignCtorValues(string id, Rectangle rect, Vector2 shift, int padding)
+        private void AssignCtorValues(Rectangle rect, int padding)
         {
-            AssignRectangle(rect, shift, padding);
+            AssignRectangle(rect, padding);
             m_pointCloud = new PointCloud();
-            m_pointCloud.Shift = shift;
             ComputePointCloud();
         }
 
-        private void AssignRectangle(Rectangle rect, Vector2 shift, int padding)
+        private void AssignRectangle(Rectangle rect, int padding)
         {
             if (padding >= rect.Height && padding >= rect.Width)
             {
                 throw new System.ArgumentException("Padding is larger than the target rectangle.");
             }
-            m_rect = new Rectangle(rect.X + (int)shift.X - padding, rect.Y + (int)shift.Y - padding, rect.Width + padding, rect.Height + padding);
+            m_rect = new Rectangle(rect.X - padding, rect.Y - padding, rect.Width + padding, rect.Height + padding);
         }
 
         private void ComputePointCloud()
@@ -49,42 +48,9 @@ namespace DadSimulator.Collider
             }
         }
 
-        public PointCloud GetAlignedPoints()
+        public PointCloud GetPointCloud()
         {
             return m_pointCloud;
-        }
-
-        public List<PointCloud> Intersection(IEnumerable<PointCloud> pointClouds)
-        {
-            var intersectingPcs = new List<PointCloud>();
-            var shiftedRect = new Rectangle(m_rect.X + (int)m_pointCloud.Shift.X, m_rect.Y + (int)m_pointCloud.Shift.Y, m_rect.Width, m_rect.Height);
-            foreach (var pc in pointClouds)
-            {
-                var intersectingPc = new PointCloud();
-                intersectingPc.PointsInOrigin = new List<Point>();
-                intersectingPc.Shift = pc.Shift;
-                intersectingPc.Id = pc.Id;
-
-                foreach (var point in pc.PointsInOrigin)
-                {
-                    if (shiftedRect.Contains(point))
-                    {
-                        intersectingPc.PointsInOrigin.Add(point);
-                    }
-                }
-
-                if (intersectingPc.PointsInOrigin.Count > 0)
-                {
-                    intersectingPcs.Add(intersectingPc);
-                }
-            }
-
-            return intersectingPcs;
-        }
-
-        public void SetShift(Vector2 shift)
-        {
-            m_pointCloud.Shift = shift;
         }
     }
 }
