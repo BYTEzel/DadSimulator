@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace DadSimulator.Collider
 {
-    public class RectangleCollider : ICollider
+    public class RectangleCollider : ICollidable
     {
         private Rectangle m_rect;
         private PointCloud m_pointCloud;
@@ -24,7 +24,6 @@ namespace DadSimulator.Collider
         {
             AssignRectangle(rect, shift, padding);
             m_pointCloud = new PointCloud();
-            m_pointCloud.Id = id;
             m_pointCloud.Shift = shift;
             ComputePointCloud();
         }

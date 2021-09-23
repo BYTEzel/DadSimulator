@@ -11,7 +11,7 @@ namespace DadSimulator.GraphicObjects
         
 
         public MovingObject(Texture2D texture2D, Vector2 startPosition, RelativePositionReference relativePosition, 
-            float speed, IMovementCommand movement, ICollider collider = null) 
+            float speed, IMovementCommand movement, ICollidable collider = null) 
             : base(texture2D, startPosition, relativePosition, collider)
         {
             m_speed = speed;
