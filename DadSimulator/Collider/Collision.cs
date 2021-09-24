@@ -73,7 +73,7 @@ namespace DadSimulator.Collider
             y1 = 0;
             y2 = 0;
             isInitialized = false;
-            ;
+
             foreach (var point in comparePc.PointCloud.PointsInOrigin)
             {
                 if (refPc.PointCloud.PointsInOrigin.Find(x =>

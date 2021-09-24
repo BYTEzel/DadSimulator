@@ -22,6 +22,7 @@ namespace DadSimulator
             m_graphics.IsFullScreen = true;
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            m_gameObjects = new List<StationaryObject>();
         }
 
         protected override void Initialize()
@@ -37,7 +38,6 @@ namespace DadSimulator
 
             m_gameObjects.Add(m_player);
             m_gameObjects.Add(m_obstacle);
-
 
             // TODO: use this.Content to load your game content here
         }

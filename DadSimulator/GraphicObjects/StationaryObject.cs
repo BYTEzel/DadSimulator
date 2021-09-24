@@ -8,7 +8,6 @@ namespace DadSimulator.GraphicObjects
 
     public class StationaryObject : IGraphicObject, ICollidable
     {
-        protected Vector2 m_position;
         protected Texture2D m_texture;
         protected Vector2 m_relPosition;
         protected string m_name;
@@ -17,7 +16,11 @@ namespace DadSimulator.GraphicObjects
         /// <summary>
         /// Get the world position of the texture.
         /// </summary>
-        public Vector2 Position { get => m_position; }
+        public Vector2 Position
+        {
+            get => m_alignedPointCloud.Shift;
+            set => m_alignedPointCloud.Shift = value;
+        }
         /// <summary>
         /// Get the position of the texture in the local coordinate system.
         /// </summary>
@@ -27,7 +30,6 @@ namespace DadSimulator.GraphicObjects
         {
             m_name = name;
             m_texture = texture2D;
-            m_position = position;
 
             if (collider == null)
             {
@@ -49,7 +51,7 @@ namespace DadSimulator.GraphicObjects
 
         public virtual void Draw(SpriteBatch batch)
         {
-            batch.Draw(m_texture, m_position, null, Color.White, 0f, m_relPosition,
+            batch.Draw(m_texture, Position, null, Color.White, 0f, m_relPosition,
                 Vector2.One, SpriteEffects.None, 0f);
         }
 
@@ -64,17 +66,17 @@ namespace DadSimulator.GraphicObjects
 
         public string GetName()
         {
-            throw new System.NotImplementedException();
+            return m_name;
         }
 
         public void SetShift(Vector2 shift)
         {
-            throw new System.NotImplementedException();
+            m_alignedPointCloud.Shift = shift;
         }
 
         public AlignedPointCloud GetAlignedPointCloud()
         {
-            throw new System.NotImplementedException();
+            return m_alignedPointCloud;
         }
     }
 }

@@ -1,3 +1,4 @@
+using DadSimulator.Collider;
 using DadSimulator.GraphicObjects;
 using DadSimulator.IO;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,6 +13,14 @@ namespace DadSimulator.Tests
         public List<Directions> GetDirections()
         {
             return CurrentDirections;
+        }
+    }
+
+    class GameObjects : ICollidableCollection
+    {
+        public List<ICollidable> GetCollectibleList()
+        {
+            return new List<ICollidable>();
         }
     }
 
@@ -44,11 +53,11 @@ namespace DadSimulator.Tests
         public void StartPosition()
         {
             var startPosition = Microsoft.Xna.Framework.Vector2.Zero;
-            var objCentered = new MovingObject(m_texture, startPosition, RelativePositionReference.Centered, 100f, null);
+            var objCentered = new MovingObject("centered", m_texture, startPosition, RelativePositionReference.Centered, 100f, null, new GameObjects());
             Assert.AreEqual(m_textureHeight / 2, objCentered.RelativePosition.X);
             Assert.AreEqual(m_textureWidth / 2, objCentered.RelativePosition.Y);
 
-            var objTopLeft = new MovingObject(m_texture, startPosition, RelativePositionReference.TopLeft, 100f, null);
+            var objTopLeft = new MovingObject("top-left", m_texture, startPosition, RelativePositionReference.TopLeft, 100f, null, new GameObjects());
             Assert.AreEqual(0, objTopLeft.RelativePosition.X);
             Assert.AreEqual(0, objTopLeft.RelativePosition.Y);
 
@@ -59,7 +68,7 @@ namespace DadSimulator.Tests
         public void Move()
         {
             var movement = new MovementInput();
-            var obj = new MovingObject(m_texture, Microsoft.Xna.Framework.Vector2.Zero, RelativePositionReference.Centered, 100f, movement);
+            var obj = new MovingObject("obj", m_texture, Microsoft.Xna.Framework.Vector2.Zero, RelativePositionReference.Centered, 100f, movement, new GameObjects());
 
             UpdateDirection(ref obj, movement, new List<Directions> { Directions.Up });
             Assert.AreEqual(0, obj.Position.X);

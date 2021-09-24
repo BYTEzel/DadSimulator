@@ -28,7 +28,7 @@ namespace DadSimulator.GraphicObjects
         public override void Update(double elapsedTime)
         {
             var movements = m_movement.GetDirections();
-            var estimatedShift = new Vector2(m_position.X, m_position.Y);
+            var estimatedShift = new Vector2(Position.X, Position.Y);
             var allColliders = m_collidableCollection.GetCollectibleList().Where(x => x.GetName() != m_name);
 
             foreach (var mov in movements)
@@ -37,7 +37,7 @@ namespace DadSimulator.GraphicObjects
                 estimatedShift = CheckCollisionsWithEstimatedShiftAndCorrect(estimatedShift, allColliders, mov);
             }
 
-            m_position = estimatedShift;
+            Position = estimatedShift;
             base.Update(elapsedTime);
         }
 
