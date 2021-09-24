@@ -2,9 +2,8 @@
 
 namespace DadSimulator.Collider
 {
-    public struct AlignedPointCloud
+    public class AlignedPointCloud : AlignedObject
     {
         public PointCloud PointCloud;
-        public Vector2 Shift;
     }
 }

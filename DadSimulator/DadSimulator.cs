@@ -4,15 +4,17 @@ using DadSimulator.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace DadSimulator
 {
-    public class DadSimulator : Game, ITemplateLoader
+    public class DadSimulator : Game, ITemplateLoader, ICollidableCollection
     {
         private GraphicsDeviceManager m_graphics;
         private SpriteBatch m_spriteBatch;
         private MovingObject m_player;
         private StationaryObject m_obstacle;
+        private List<StationaryObject> m_gameObjects;
 
         public DadSimulator()
         {
@@ -30,9 +32,11 @@ namespace DadSimulator
         protected override void LoadContent()
         {
             m_spriteBatch = new SpriteBatch(GraphicsDevice);
-            m_player = new MovingObject(Content.Load<Texture2D>("Smiley"), new Vector2(200, 200), RelativePositionReference.Centered, 100f, new KeyboardMovement());
-            m_obstacle = new StationaryObject(Content.Load<Texture2D>("Test/test-blank"), new Vector2(500, 500), RelativePositionReference.Centered);
+            m_player = new MovingObject("player", Content.Load<Texture2D>("Smiley"), new Vector2(200, 200), RelativePositionReference.Centered, 100f, new KeyboardMovement(), this);
+            m_obstacle = new StationaryObject("obstacle", Content.Load<Texture2D>("Test/test-blank"), new Vector2(500, 500), RelativePositionReference.Centered);
 
+            m_gameObjects.Add(m_player);
+            m_gameObjects.Add(m_obstacle);
 
 
             // TODO: use this.Content to load your game content here
@@ -45,8 +49,10 @@ namespace DadSimulator
                 Exit();
 
             var gameSeconds = gameTime.ElapsedGameTime.TotalSeconds;
-            m_player.Update(gameSeconds);
-            m_obstacle.Update(gameSeconds);
+            foreach (var gameObj in m_gameObjects)
+            {
+                gameObj.Update(gameSeconds);
+            }
 
             // TODO: Add your update logic here
 
@@ -59,8 +65,10 @@ namespace DadSimulator
 
             // TODO: Add your drawing code here
             m_spriteBatch.Begin();
-            m_player.Draw(m_spriteBatch);
-            m_obstacle.Draw(m_spriteBatch);
+            foreach (var gameObj in m_gameObjects)
+            {
+                gameObj.Draw(m_spriteBatch);
+            }
             m_spriteBatch.End();
             
 
@@ -88,6 +96,16 @@ namespace DadSimulator
             }
 
             return Content.Load<Texture2D>(stringName);
+        }
+
+        public List<ICollidable> GetCollectibleList()
+        {
+            List<ICollidable> list = new List<ICollidable>();
+            foreach (var item in m_gameObjects)
+            {
+                list.Add(item);
+            }
+            return list;
         }
     }
 }

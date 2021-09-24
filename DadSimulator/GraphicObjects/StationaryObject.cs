@@ -6,12 +6,13 @@ namespace DadSimulator.GraphicObjects
 {
     public enum RelativePositionReference { TopLeft, Centered };
 
-    public class StationaryObject : IGraphicObject
+    public class StationaryObject : IGraphicObject, ICollidable
     {
         protected Vector2 m_position;
         protected Texture2D m_texture;
         protected Vector2 m_relPosition;
-        protected ICollidable m_collider;
+        protected string m_name;
+        protected AlignedPointCloud m_alignedPointCloud;
 
         /// <summary>
         /// Get the world position of the texture.
@@ -22,19 +23,17 @@ namespace DadSimulator.GraphicObjects
         /// </summary>
         public Vector2 RelativePosition { get => m_relPosition; }
 
-        public StationaryObject(string id, Texture2D texture2D, Vector2 position, RelativePositionReference relativePosition, ICollidable collider = null)
+        public StationaryObject(string name, Texture2D texture2D, Vector2 position, RelativePositionReference relativePosition, ICollider collider = null)
         {
+            m_name = name;
             m_texture = texture2D;
             m_position = position;
 
-            if (collider != null)
+            if (collider == null)
             {
-                m_collider = collider;
+                collider = new RectangleCollider(texture2D);
             }
-            else
-            {
-                m_collider = new RectangleCollider(texture2D, position);
-            }
+            m_alignedPointCloud = new AlignedPointCloud { Shift = position, PointCloud = collider.GetPointCloud() };
 
             switch (relativePosition)
             {
@@ -61,6 +60,21 @@ namespace DadSimulator.GraphicObjects
         public virtual void Update(double elapsedTime)
         {
             
+        }
+
+        public string GetName()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void SetShift(Vector2 shift)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public AlignedPointCloud GetAlignedPointCloud()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
