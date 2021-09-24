@@ -64,6 +64,11 @@ namespace DadSimulator.Collider
 
         private static void ComputeIntersection(AlignedPointCloud refPc, AlignedPointCloud comparePc, IntersectionResult result, out int x1, out int x2, out int y1, out int y2, out bool isInitialized)
         {
+            if (refPc.PointCloud.PointsInOrigin.Count <= 0 || comparePc.PointCloud.PointsInOrigin.Count <= 0)
+            {
+                throw new ArgumentException("Invalid amount of points, unable to compute intersection");
+            }
+
             var refShiftX = (int)refPc.Shift.X;
             var refShiftY = (int)refPc.Shift.Y;
             var compareShiftX = (int)comparePc.Shift.X;
@@ -76,9 +81,9 @@ namespace DadSimulator.Collider
 
             foreach (var point in comparePc.PointCloud.PointsInOrigin)
             {
-                if (refPc.PointCloud.PointsInOrigin.Find(x =>
+                if (refPc.PointCloud.PointsInOrigin.FindIndex(x =>
                     x.X + refShiftX == point.X + compareShiftX &&
-                    x.Y + refShiftY == point.Y + compareShiftY) != null)
+                    x.Y + refShiftY == point.Y + compareShiftY) > -1)
                 {
                     var newPoint = new Point(point.X - compareShiftX, point.Y - compareShiftY);
                     if (!isInitialized)

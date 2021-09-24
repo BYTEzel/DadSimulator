@@ -39,9 +39,9 @@ namespace DadSimulator.Collider
         private void ComputePointCloud()
         {
             m_pointCloud.PointsInOrigin = new List<Point>();
-            for (int x = m_rect.X; x < m_rect.Width; x++)
+            for (int x = m_rect.X; x < m_rect.X + m_rect.Width; x++)
             {
-                for (int y = m_rect.Y; y < m_rect.Height; y++)
+                for (int y = m_rect.Y; y < m_rect.Y + m_rect.Height; y++)
                 {
                     m_pointCloud.PointsInOrigin.Add(new Point(x, y));
                 }
