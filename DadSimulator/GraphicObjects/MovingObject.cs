@@ -28,16 +28,19 @@ namespace DadSimulator.GraphicObjects
         public override void Update(double elapsedTime)
         {
             var movements = m_movement.GetDirections();
-            var estimatedShift = new Vector2(Position.X, Position.Y);
-            var allColliders = m_collidableCollection.GetCollectibleList().Where(x => x.GetName() != m_name);
-
-            foreach (var mov in movements)
+            if (movements.Count > 0)
             {
-                estimatedShift = ComputeEstimatedShift(elapsedTime, estimatedShift, mov);
-                estimatedShift = CheckCollisionsWithEstimatedShiftAndCorrect(estimatedShift, allColliders, mov);
-            }
+                var estimatedShift = new Vector2(Position.X, Position.Y);
+                var allColliders = m_collidableCollection.GetCollectibleList().Where(x => x.GetName() != m_name);
 
-            Position = estimatedShift;
+                foreach (var mov in movements)
+                {
+                    estimatedShift = ComputeEstimatedShift(elapsedTime, estimatedShift, mov);
+                    estimatedShift = CheckCollisionsWithEstimatedShiftAndCorrect(estimatedShift, allColliders, mov);
+                }
+
+                Position = estimatedShift;
+            }
             base.Update(elapsedTime);
         }
 

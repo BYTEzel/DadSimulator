@@ -18,11 +18,19 @@ namespace DadSimulator
 
         public DadSimulator()
         {
-            m_graphics = new GraphicsDeviceManager(this);
-            m_graphics.IsFullScreen = true;
+            InitGraphics();
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             m_gameObjects = new List<StationaryObject>();
+        }
+
+        private void InitGraphics()
+        {
+            m_graphics = new GraphicsDeviceManager(this);
+            m_graphics.IsFullScreen = true;
+            m_graphics.PreferredBackBufferWidth = 1280;
+            m_graphics.PreferredBackBufferHeight = 720;
+            m_graphics.ApplyChanges();
         }
 
         protected override void Initialize()
@@ -55,7 +63,6 @@ namespace DadSimulator
             }
 
             // TODO: Add your update logic here
-
             base.Update(gameTime);
         }
 
