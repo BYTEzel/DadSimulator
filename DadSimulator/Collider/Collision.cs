@@ -3,7 +3,7 @@ using System;
 
 namespace DadSimulator.Collider
 {
-    public enum IntersectionType { NoIntersection, Intersection, Equal }
+    public enum IntersectionType { NoIntersection, Intersection, CompletelyContained, Equal }
     
     public struct IntersectionResult
     {
@@ -29,7 +29,7 @@ namespace DadSimulator.Collider
             bool isInitialized;
             ComputeIntersection(refPc, comparePc, result, out x1, out x2, out y1, out y2, out isInitialized);
             result = AssignBoundingBox(result, x1, x2, y1, y2, isInitialized);
-            result = CheckIntersectionResultType(refPc, result);
+            result = CheckIntersectionResultType(refPc, comparePc, result);
             return result;
         }
 
@@ -47,7 +47,7 @@ namespace DadSimulator.Collider
             return result;
         }
 
-        private static IntersectionResult CheckIntersectionResultType(AlignedPointCloud refPc, IntersectionResult result)
+        private static IntersectionResult CheckIntersectionResultType(AlignedPointCloud refPc, AlignedPointCloud comparePc, IntersectionResult result)
         {
             if (result.AlignedPointCloud.PointCloud.PointsInOrigin.Count > 0)
             {
@@ -55,6 +55,12 @@ namespace DadSimulator.Collider
             }
 
             if (result.AlignedPointCloud.PointCloud.PointsInOrigin.Count == refPc.PointCloud.PointsInOrigin.Count)
+            {
+                result.Type = IntersectionType.CompletelyContained;
+            }
+
+            if (refPc.PointCloud.PointsInOrigin.Count == comparePc.PointCloud.PointsInOrigin.Count && 
+                result.AlignedPointCloud.PointCloud.PointsInOrigin.Count == refPc.PointCloud.PointsInOrigin.Count)
             {
                 result.Type = IntersectionType.Equal;
             }

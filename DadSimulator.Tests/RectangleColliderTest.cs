@@ -27,7 +27,9 @@ namespace DadSimulator.Tests
 
         [TestCase(1, 1, 0, 1)]
         [TestCase(10, 10, 0, 100)]
-        [TestCase(10, 10, 1, 64)]
+        [TestCase(10, 10, -1, 64)]
+        [TestCase(10, 10, 1, 144)]
+        [TestCase(10, 10, 2, 196)]
         public void PointCloudSize(int width, int height, int padding, int numPoints)
         {
             var collider = new RectangleCollider(new Rectangle(0, 0, width, height), padding);

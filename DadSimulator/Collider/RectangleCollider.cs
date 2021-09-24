@@ -33,12 +33,11 @@ namespace DadSimulator.Collider
             {
                 throw new System.ArgumentException("Padding is larger than the target rectangle.");
             }
-            m_rect = new Rectangle(rect.X - padding, rect.Y - padding, rect.Width + padding, rect.Height + padding);
+            m_rect = new Rectangle(rect.X - padding, rect.Y - padding, rect.Width + 2*padding, rect.Height + 2*padding);
         }
 
         private void ComputePointCloud()
         {
-            m_pointCloud.PointsInOrigin = new List<Point>();
             for (int x = m_rect.X; x < m_rect.X + m_rect.Width; x++)
             {
                 for (int y = m_rect.Y; y < m_rect.Y + m_rect.Height; y++)
