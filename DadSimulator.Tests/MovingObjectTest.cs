@@ -92,7 +92,7 @@ namespace DadSimulator.Tests
 
         }
 
-        void UpdateDirection(ref MovingObject obj, MovementInput movement, List<Directions> directions)
+        void UpdateDirection(ref Player obj, MovementInput movement, List<Directions> directions)
         {
             movement.CurrentDirections = directions;
             obj.Update(1);

@@ -5,15 +5,15 @@ using System.Linq;
 
 namespace DadSimulator.GraphicObjects
 {
-    public class MovingObject : StationaryObject
+    public class Player : LevelBounds
     {
         private readonly float m_speed;
         private IMovementCommand m_movement;
         private ICollidableCollection m_collidableCollection;
 
-        public MovingObject(string name, Texture2D texture2D, Vector2 startPosition, RelativePositionReference relativePosition, 
-            float speed, IMovementCommand movement, ICollidableCollection collidableCollection, ICollider collider = null) 
-            : base(name, texture2D, startPosition, relativePosition, collider)
+        public Player(string name, Texture2D texture2D, Vector2 startPosition, 
+            float speed, IMovementCommand movement, ICollidableCollection collidableCollection, ICollider collider = null)
+            : base(name, texture2D, startPosition, collider)
         {
             m_speed = speed;
             m_movement = movement;

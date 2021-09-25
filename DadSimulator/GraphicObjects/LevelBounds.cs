@@ -4,12 +4,9 @@ using DadSimulator.Collider;
 
 namespace DadSimulator.GraphicObjects
 {
-    public enum RelativePositionReference { TopLeft, Centered };
-
-    public class StationaryObject : IGraphicObject, ICollidable
+    public class LevelBounds : IGraphicObject, ICollidable
     {
         protected Texture2D m_texture;
-        protected Vector2 m_relPosition;
         protected string m_name;
         protected AlignedPointCloud m_alignedPointCloud;
 
@@ -21,12 +18,8 @@ namespace DadSimulator.GraphicObjects
             get => m_alignedPointCloud.Shift;
             set => m_alignedPointCloud.Shift = value;
         }
-        /// <summary>
-        /// Get the position of the texture in the local coordinate system.
-        /// </summary>
-        public Vector2 RelativePosition { get => m_relPosition; }
 
-        public StationaryObject(string name, Texture2D texture2D, Vector2 position, RelativePositionReference relativePosition, ICollider collider = null)
+        public LevelBounds(string name, Texture2D texture2D, Vector2 position, ICollider collider = null)
         {
             m_name = name;
             m_texture = texture2D;
@@ -36,17 +29,7 @@ namespace DadSimulator.GraphicObjects
                 collider = new RectangleCollider(texture2D);
             }
 
-            switch (relativePosition)
-            {
-                case RelativePositionReference.Centered:
-                    m_relPosition = new Vector2(m_texture.Width / 2, m_texture.Height / 2);
-                    break;
-                case RelativePositionReference.TopLeft:
-                default:
-                    m_relPosition = Vector2.Zero;
-                    break;
-            }
-            m_alignedPointCloud = new AlignedPointCloud { Shift = position + m_relPosition, PointCloud = collider.GetPointCloud() };
+            m_alignedPointCloud = new AlignedPointCloud { Shift = position, PointCloud = collider.GetPointCloud() };
         }
 
         public virtual void Draw(SpriteBatch batch)
@@ -60,7 +43,7 @@ namespace DadSimulator.GraphicObjects
 
         public virtual void Update(double elapsedTime)
         {
-            
+
         }
 
         public string GetName()

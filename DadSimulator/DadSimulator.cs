@@ -12,16 +12,18 @@ namespace DadSimulator
     {
         private GraphicsDeviceManager m_graphics;
         private SpriteBatch m_spriteBatch;
-        private MovingObject m_player;
-        private StationaryObject m_obstacle;
-        private List<StationaryObject> m_gameObjects;
+        private Player m_player;
+        private LevelBackground m_levelBackground;
+        private List<IGraphicObject> m_gameObjects;
+        private List<ICollidable> m_collidableObjects;
 
         public DadSimulator()
         {
             InitGraphics();
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            m_gameObjects = new List<StationaryObject>();
+            m_gameObjects = new List<IGraphicObject>();
+            m_collidableObjects = new List<ICollidable>();
         }
 
         private void InitGraphics()
@@ -41,11 +43,13 @@ namespace DadSimulator
         protected override void LoadContent()
         {
             m_spriteBatch = new SpriteBatch(GraphicsDevice);
-            m_player = new MovingObject("player", Content.Load<Texture2D>("Smiley"), new Vector2(200, 200), RelativePositionReference.Centered, 100f, new KeyboardMovement(), this);
-            m_obstacle = new StationaryObject("obstacle", Content.Load<Texture2D>("Test/test-blank"), new Vector2(500, 500), RelativePositionReference.Centered);
+            m_player = new Player("player", Content.Load<Texture2D>("Smiley"), new Vector2(200, 200), 100f, new KeyboardMovement(), this);
+            m_levelBackground = new LevelBackground("obstacle", Content.Load<Texture2D>("Test/test-blank"), new Vector2(500, 500));
 
+            m_gameObjects.Add(m_levelBackground);
             m_gameObjects.Add(m_player);
-            m_gameObjects.Add(m_obstacle);
+
+            m_collidableObjects.Add(m_player);
 
             // TODO: use this.Content to load your game content here
         }
@@ -107,12 +111,7 @@ namespace DadSimulator
 
         public List<ICollidable> GetCollectibleList()
         {
-            List<ICollidable> list = new List<ICollidable>();
-            foreach (var item in m_gameObjects)
-            {
-                list.Add(item);
-            }
-            return list;
+            return m_collidableObjects;
         }
     }
 }
