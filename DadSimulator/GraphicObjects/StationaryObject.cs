@@ -51,8 +51,7 @@ namespace DadSimulator.GraphicObjects
 
         public virtual void Draw(SpriteBatch batch)
         {
-            batch.Draw(m_texture, Position, null, Color.White, 0f, m_relPosition,
-                Vector2.One, SpriteEffects.None, 0f);
+            batch.Draw(m_texture, Position, null, Color.White);
         }
 
         public virtual void Initialize()
