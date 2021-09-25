@@ -35,7 +35,6 @@ namespace DadSimulator.GraphicObjects
             {
                 collider = new RectangleCollider(texture2D);
             }
-            m_alignedPointCloud = new AlignedPointCloud { Shift = position, PointCloud = collider.GetPointCloud() };
 
             switch (relativePosition)
             {
@@ -47,6 +46,7 @@ namespace DadSimulator.GraphicObjects
                     m_relPosition = Vector2.Zero;
                     break;
             }
+            m_alignedPointCloud = new AlignedPointCloud { Shift = position + m_relPosition, PointCloud = collider.GetPointCloud() };
         }
 
         public virtual void Draw(SpriteBatch batch)
