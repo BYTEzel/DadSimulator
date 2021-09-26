@@ -11,7 +11,7 @@ namespace DadSimulator.Tests
 {
     public class TextureColliderTest
     {
-        private Color[,] m_texture;
+        private Color[,] m_textureWithTransparency, m_textureWithoutTransparency;
 
         [SetUp]
         public void Setup()
@@ -20,17 +20,27 @@ namespace DadSimulator.Tests
             {
                 sim.RunOneFrame();
                 ITemplateLoader loader = sim;
-                m_texture = loader.LoadTemplateContent(Templates.TestTextureTransparency);
+                m_textureWithTransparency = loader.LoadTemplateContent(Templates.TestTextureTransparency);
+                m_textureWithoutTransparency = loader.LoadTemplateContent(Templates.Test);
             }
         }
 
         [Test]
         public void TransparencyHandling()
         {
-            var collider = new TextureCollider(m_texture);
+            var collider = new TextureCollider(m_textureWithTransparency);
             var pc = collider.GetPointCloud();
-            Assert.Less(pc.PointsInOrigin.Count, m_texture.GetLength(0) * m_texture.GetLength(1));
-            Assert.Greater(0, pc.PointsInOrigin.Count);
+            Assert.Less(pc.PointsInOrigin.Count, m_textureWithTransparency.GetLength(0) * m_textureWithTransparency.GetLength(1));
+            Assert.Greater(pc.PointsInOrigin.Count, 0);
+        }
+
+        [Test]
+        public void ImageWithoutTransparency()
+        {
+            var collider = new TextureCollider(m_textureWithoutTransparency);
+            Assert.AreEqual(
+                m_textureWithoutTransparency.GetLength(0) * m_textureWithoutTransparency.GetLength(1), 
+                collider.GetPointCloud().PointsInOrigin.Count);
         }
 
 

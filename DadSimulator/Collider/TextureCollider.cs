@@ -11,7 +11,7 @@ namespace DadSimulator.Collider
         private PointCloud m_pc;
         public TextureCollider(Color[,] texture)
         {
-            var m_pc = new PointCloud();
+            m_pc = new PointCloud();
             LocateNonTransparentPixel(texture);
         }
 
