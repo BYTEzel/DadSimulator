@@ -102,6 +102,10 @@ namespace DadSimulator
                 case Templates.Test:
                     stringName = "Test/test-blank";
                     break;
+                case Templates.TestTextureTransparency:
+                    stringName = "Test/smiley-test";
+                    break;
+                    
                 default:
                     break;
             }
@@ -112,6 +116,23 @@ namespace DadSimulator
         public List<ICollidable> GetCollectibleList()
         {
             return m_collidableObjects;
+        }
+
+        public Color[,] LoadTemplateContent(Templates name)
+        {
+            var texture = LoadTemplate(name);
+            Color[] colors1D = new Color[texture.Width * texture.Height];
+            texture.GetData(colors1D);
+            var colors2D = new Color[texture.Width, texture.Height];
+            for (int row = 0; row < texture.Height; row++)
+            {
+                for (int column = 0; column < texture.Width; column++)
+                {
+                    // Assumes row major ordering of the array.
+                    colors2D[row, column] = colors1D[row * texture.Width + column];
+                }
+            }
+            return colors2D;
         }
     }
 }

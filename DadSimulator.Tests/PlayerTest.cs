@@ -24,7 +24,7 @@ namespace DadSimulator.Tests
         }
     }
 
-    public class MovingObjectTest
+    public class PlayerTest
     {
         private Texture2D m_texture;
 
@@ -53,22 +53,17 @@ namespace DadSimulator.Tests
         public void StartPosition()
         {
             var startPosition = Microsoft.Xna.Framework.Vector2.Zero;
-            var objCentered = new MovingObject("centered", m_texture, startPosition, RelativePositionReference.Centered, 100f, null, new GameObjects());
-            Assert.AreEqual(m_textureHeight / 2, objCentered.RelativePosition.X);
-            Assert.AreEqual(m_textureWidth / 2, objCentered.RelativePosition.Y);
 
-            var objTopLeft = new MovingObject("top-left", m_texture, startPosition, RelativePositionReference.TopLeft, 100f, null, new GameObjects());
-            Assert.AreEqual(0, objTopLeft.RelativePosition.X);
-            Assert.AreEqual(0, objTopLeft.RelativePosition.Y);
-
-            Assert.AreEqual(objCentered.Position, objTopLeft.Position);
+            var objTopLeft = new Player("top-left", m_texture, startPosition, 100f, null, new GameObjects());
+            Assert.AreEqual(0, objTopLeft.Position.X);
+            Assert.AreEqual(0, objTopLeft.Position.Y);
         }
 
         [Test]
         public void Move()
         {
             var movement = new MovementInput();
-            var obj = new MovingObject("obj", m_texture, Microsoft.Xna.Framework.Vector2.Zero, RelativePositionReference.Centered, 100f, movement, new GameObjects());
+            var obj = new Player("obj", m_texture, Microsoft.Xna.Framework.Vector2.Zero, 100f, movement, new GameObjects());
 
             UpdateDirection(ref obj, movement, new List<Directions> { Directions.Up });
             Assert.AreEqual(0, obj.Position.X);
