@@ -12,8 +12,8 @@ namespace DadSimulator
     {
         private GraphicsDeviceManager m_graphics;
         private SpriteBatch m_spriteBatch;
-        private Player m_player;
-        private LevelBackground m_levelBackground;
+        //private Player m_player;
+        //private LevelBackground m_levelBackground;
         private List<IGraphicObject> m_gameObjects;
         private List<ICollidable> m_collidableObjects;
 
@@ -43,13 +43,18 @@ namespace DadSimulator
         protected override void LoadContent()
         {
             m_spriteBatch = new SpriteBatch(GraphicsDevice);
-            m_player = new Player("player", Content.Load<Texture2D>("Smiley"), new Vector2(200, 200), 100f, new KeyboardMovement(), this);
-            m_levelBackground = new LevelBackground("obstacle", Content.Load<Texture2D>("Test/test-blank"), new Vector2(500, 500));
+            var player = new Player("player", LoadTemplate(Templates.Character), new Vector2(200, 200), 100f, 
+                new KeyboardMovement(), this, new TextureCollider(LoadTemplateContent(Templates.Character)));
+            var levelBackground = new LevelBackground("obstacle", LoadTemplate(Templates.Test), new Vector2(500, 500));
+            var levelObstacle = new LevelBounds("bounds", LoadTemplate(Templates.Test), new Vector2(400, 400), 
+                new RectangleCollider(LoadTemplate(Templates.Test)));
 
-            m_gameObjects.Add(m_levelBackground);
-            m_gameObjects.Add(m_player);
+            m_gameObjects.Add(levelBackground);
+            m_gameObjects.Add(levelObstacle);
+            m_gameObjects.Add(player);
 
-            m_collidableObjects.Add(m_player);
+            m_collidableObjects.Add(levelObstacle);
+            m_collidableObjects.Add(player);
 
             // TODO: use this.Content to load your game content here
         }

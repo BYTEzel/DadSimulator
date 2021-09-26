@@ -12,7 +12,7 @@ namespace DadSimulator.GraphicObjects
         private ICollidableCollection m_collidableCollection;
 
         public Player(string name, Texture2D texture2D, Vector2 startPosition, 
-            float speed, IMovementCommand movement, ICollidableCollection collidableCollection, ICollider collider = null)
+            float speed, IMovementCommand movement, ICollidableCollection collidableCollection, ICollider collider)
             : base(name, texture2D, startPosition, collider)
         {
             m_speed = speed;

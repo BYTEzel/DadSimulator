@@ -1,14 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace DadSimulator.Collider
 {
     public class TextureCollider : ICollider
     {
-        private PointCloud m_pc;
+        private readonly PointCloud m_pc;
+
         public TextureCollider(Color[,] texture)
         {
             m_pc = new PointCloud();

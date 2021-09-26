@@ -19,16 +19,14 @@ namespace DadSimulator.GraphicObjects
             set => m_alignedPointCloud.Shift = value;
         }
 
-        public LevelBounds(string name, Texture2D texture2D, Vector2 position, ICollider collider = null)
+        public LevelBounds(string name, Texture2D texture2D, Vector2 position, ICollider collider)
         {
-            m_name = name;
-            m_texture = texture2D;
-
             if (collider == null)
             {
-                collider = new RectangleCollider(texture2D);
+                throw new System.ArgumentNullException("Collider must be provided.");
             }
-
+            m_name = name;
+            m_texture = texture2D;
             m_alignedPointCloud = new AlignedPointCloud { Shift = position, PointCloud = collider.GetPointCloud() };
         }
 
