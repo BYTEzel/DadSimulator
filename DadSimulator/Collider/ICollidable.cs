@@ -15,11 +15,10 @@ namespace DadSimulator.Collider
         /// </summary>
         /// <param name="shift">Transformation for the points.</param>
         void SetShift(Vector2 shift);
-
         /// <summary>
         /// Get the point cloud which is stored within the implementing class.
         /// </summary>
         /// <returns>Aligned points.</returns>
-        AlignedPointCloud GetAlignedPointCloud();
+        AlignedPointCloud GetColliderAlignedPointCloud();
     }
 }

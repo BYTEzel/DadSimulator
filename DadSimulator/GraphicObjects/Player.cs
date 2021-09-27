@@ -49,7 +49,7 @@ namespace DadSimulator.GraphicObjects
             foreach (var collider in allColliders)
             {
                 var estimatedAlignedPointCloud = new AlignedPointCloud() { PointCloud = m_alignedPointCloud.PointCloud, Shift = estimatedShift };
-                var intersectResult = Collision.Intersection(estimatedAlignedPointCloud, collider.GetAlignedPointCloud());
+                var intersectResult = Collision.Intersection(estimatedAlignedPointCloud, collider.GetColliderAlignedPointCloud());
                 if (IntersectionType.Equal == intersectResult.Type || IntersectionType.Intersection == intersectResult.Type)
                 {
                     estimatedShift = CorrectEstimatedShift(estimatedShift, mov, intersectResult);

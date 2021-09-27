@@ -54,7 +54,7 @@ namespace DadSimulator.GraphicObjects
             m_alignedPointCloud.Shift = shift;
         }
 
-        public AlignedPointCloud GetAlignedPointCloud()
+        public AlignedPointCloud GetColliderAlignedPointCloud()
         {
             return m_alignedPointCloud;
         }
