@@ -64,16 +64,16 @@ namespace DadSimulator.GraphicObjects
             switch (mov)
             {
                 case Directions.Up:
-                    estimatedShift.Y += intersectResult.AlignedBoundingBox.Rectangle.Height + 1;
+                    estimatedShift.Y = (int)estimatedShift.Y + intersectResult.AlignedBoundingBox.Rectangle.Height + 1;
                     break;
                 case Directions.Right:
-                    estimatedShift.X -= intersectResult.AlignedBoundingBox.Rectangle.Width + 1;
+                    estimatedShift.X = (int)estimatedShift.X - (intersectResult.AlignedBoundingBox.Rectangle.Width + 1);
                     break;
                 case Directions.Down:
-                    estimatedShift.Y -= intersectResult.AlignedBoundingBox.Rectangle.Height + 1;
+                    estimatedShift.Y = (int)estimatedShift.Y - (intersectResult.AlignedBoundingBox.Rectangle.Height + 1);
                     break;
                 case Directions.Left:
-                    estimatedShift.X += intersectResult.AlignedBoundingBox.Rectangle.Width + 1;
+                    estimatedShift.X = (int)estimatedShift.X + intersectResult.AlignedBoundingBox.Rectangle.Width + 1;
                     break;
                 default:
                     break;

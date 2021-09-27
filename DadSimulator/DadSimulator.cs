@@ -29,9 +29,9 @@ namespace DadSimulator
         private void InitGraphics()
         {
             m_graphics = new GraphicsDeviceManager(this);
-            m_graphics.IsFullScreen = true;
-            m_graphics.PreferredBackBufferWidth = 1280;
-            m_graphics.PreferredBackBufferHeight = 720;
+            //m_graphics.IsFullScreen = true;
+            m_graphics.PreferredBackBufferWidth = 1920;
+            m_graphics.PreferredBackBufferHeight = 1280;
             m_graphics.ApplyChanges();
         }
 
@@ -45,6 +45,8 @@ namespace DadSimulator
             m_spriteBatch = new SpriteBatch(GraphicsDevice);
             var player = new Player("player", LoadTemplate(Templates.Character), new Vector2(200, 200), 100f, 
                 new KeyboardMovement(), this, new TextureCollider(LoadTemplateContent(Templates.Character)));
+            //var player = new Player("player", LoadTemplate(Templates.Test), new Vector2(200, 200), 100f,
+            //    new KeyboardMovement(), this, new RectangleCollider(LoadTemplate(Templates.Test)));
             var levelBackground = new LevelBackground("obstacle", LoadTemplate(Templates.Test), new Vector2(500, 500));
             var levelObstacle = new LevelBounds("bounds", LoadTemplate(Templates.Test), new Vector2(400, 400), 
                 new RectangleCollider(LoadTemplate(Templates.Test)));
