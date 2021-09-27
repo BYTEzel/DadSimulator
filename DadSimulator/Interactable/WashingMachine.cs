@@ -72,7 +72,7 @@ namespace DadSimulator.Interactable
 
         public void Draw(SpriteBatch batch)
         {
-            batch.Draw(m_texture, m_alignedPointCloudCollider.Shift, null, Color.White);
+            batch.Draw(m_texture, m_alignedPointCloudCollider.Shift, null, Color.Red);
         }
 
         public void SetShift(Vector2 shift)
@@ -82,12 +82,12 @@ namespace DadSimulator.Interactable
 
         public AlignedPointCloud GetInteractableAlignedPointCloud()
         {
-            return m_alignedPointCloudCollider;
+            return m_alignedPointCloudInteraction;
         }
 
         public AlignedPointCloud GetColliderAlignedPointCloud()
         {
-            return m_alignedPointCloudInteraction;
+            return m_alignedPointCloudCollider;
         }
     }
 }

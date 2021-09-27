@@ -1,5 +1,6 @@
 ﻿using DadSimulator.Collider;
 using DadSimulator.GraphicObjects;
+using DadSimulator.Interactable;
 using DadSimulator.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -8,14 +9,13 @@ using System.Collections.Generic;
 
 namespace DadSimulator
 {
-    public class DadSimulator : Game, ITemplateLoader, ICollidableCollection
+    public class DadSimulator : Game, ITemplateLoader, ICollidableCollection, IInteractableCollection
     {
         private GraphicsDeviceManager m_graphics;
         private SpriteBatch m_spriteBatch;
-        //private Player m_player;
-        //private LevelBackground m_levelBackground;
         private List<IGraphicObject> m_gameObjects;
         private List<ICollidable> m_collidableObjects;
+        private List<IInteractable> m_interactables;
 
         public DadSimulator()
         {
@@ -24,6 +24,7 @@ namespace DadSimulator
             IsMouseVisible = true;
             m_gameObjects = new List<IGraphicObject>();
             m_collidableObjects = new List<ICollidable>();
+            m_interactables = new List<IInteractable>();
         }
 
         private void InitGraphics()
@@ -47,17 +48,23 @@ namespace DadSimulator
                 new KeyboardMovement(), this, new TextureCollider(LoadTemplateContent(Templates.Character)));
             //var player = new Player("player", LoadTemplate(Templates.Test), new Vector2(200, 200), 100f,
             //    new KeyboardMovement(), this, new RectangleCollider(LoadTemplate(Templates.Test)));
-            var levelBackground = new LevelBackground("obstacle", LoadTemplate(Templates.Test), new Vector2(500, 500));
+            var levelBackground = new LevelBackground("obstacle", LoadTemplate(Templates.Test), new Vector2(100, 100));
             var levelObstacle = new LevelBounds("bounds", LoadTemplate(Templates.Test), new Vector2(400, 400), 
                 new RectangleCollider(LoadTemplate(Templates.Test)));
+            var washMaschine = new WashingMachine(LoadTemplate(Templates.Test), new Vector2(200, 50),
+                new RectangleCollider(LoadTemplate(Templates.Test)),
+                new RectangleCollider(new Rectangle(new Point(190, 490), new Point(220, 520))));
 
             m_gameObjects.Add(levelBackground);
             m_gameObjects.Add(levelObstacle);
+            m_gameObjects.Add(washMaschine);
             m_gameObjects.Add(player);
 
             m_collidableObjects.Add(levelObstacle);
+            m_collidableObjects.Add(washMaschine);
             m_collidableObjects.Add(player);
 
+            m_interactables.Add(washMaschine);
             // TODO: use this.Content to load your game content here
         }
 
@@ -140,6 +147,11 @@ namespace DadSimulator
                 }
             }
             return colors2D;
+        }
+
+        public List<IInteractable> GetInteractables()
+        {
+            return m_interactables;
         }
     }
 }
