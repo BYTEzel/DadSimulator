@@ -1,4 +1,5 @@
 ﻿using DadSimulator.Collider;
+using DadSimulator.Interactable;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Linq;
@@ -10,14 +11,17 @@ namespace DadSimulator.GraphicObjects
         private readonly float m_speed;
         private IMovementCommand m_movement;
         private ICollidableCollection m_collidableCollection;
+        private IInteractableCollection m_interactableCollection;
 
         public Player(string name, Texture2D texture2D, Vector2 startPosition, 
-            float speed, IMovementCommand movement, ICollidableCollection collidableCollection, ICollider collider)
+            float speed, IMovementCommand movement, ICollidableCollection collidableCollection, 
+            IInteractableCollection interactableCollection, ICollider collider)
             : base(name, texture2D, startPosition, collider)
         {
             m_speed = speed;
             m_movement = movement;
             m_collidableCollection = collidableCollection;
+            m_interactableCollection = interactableCollection;
         }
 
         public override void Initialize()
@@ -30,18 +34,35 @@ namespace DadSimulator.GraphicObjects
             var movements = m_movement.GetDirections();
             if (movements.Count > 0)
             {
-                var estimatedShift = new Vector2(Position.X, Position.Y);
-                var allColliders = m_collidableCollection.GetCollectibleList().Where(x => x.GetName() != m_name);
-
-                foreach (var mov in movements)
+                HandleCollisions(elapsedTime, movements);
+                var allInteractable = m_interactableCollection.GetInteractables();
+                foreach (var interactable in allInteractable)
                 {
-                    estimatedShift = ComputeEstimatedShift(elapsedTime, estimatedShift, mov);
-                    estimatedShift = CheckCollisionsWithEstimatedShiftAndCorrect(estimatedShift, allColliders, mov);
+                    var intersectResult = Collision.Intersection(m_alignedPointCloud, interactable.GetInteractableAlignedPointCloud());
+                /*
+                    if (IntersectionType.Equal == intersectResult.Type || IntersectionType.Intersection == intersectResult.Type)
+                    {
+                        var name = interactable.GetName();
+                        var state = interactable.GetState();
+                    }
+                */
                 }
-
-                Position = estimatedShift;
             }
             base.Update(elapsedTime);
+        }
+
+        private void HandleCollisions(double elapsedTime, System.Collections.Generic.List<Directions> movements)
+        {
+            var estimatedShift = new Vector2(Position.X, Position.Y);
+            var allColliders = m_collidableCollection.GetCollectibleList().Where(x => x.GetName() != m_name);
+
+            foreach (var mov in movements)
+            {
+                estimatedShift = ComputeEstimatedShift(elapsedTime, estimatedShift, mov);
+                estimatedShift = CheckCollisionsWithEstimatedShiftAndCorrect(estimatedShift, allColliders, mov);
+            }
+
+            Position = estimatedShift;
         }
 
         private Vector2 CheckCollisionsWithEstimatedShiftAndCorrect(Vector2 estimatedShift, System.Collections.Generic.IEnumerable<ICollidable> allColliders, Directions mov)

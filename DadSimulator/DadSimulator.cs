@@ -45,7 +45,7 @@ namespace DadSimulator
         {
             m_spriteBatch = new SpriteBatch(GraphicsDevice);
             var player = new Player("player", LoadTemplate(Templates.Character), new Vector2(200, 200), 100f, 
-                new KeyboardMovement(), this, new TextureCollider(LoadTemplateContent(Templates.Character)));
+                new KeyboardMovement(), this, this, new TextureCollider(LoadTemplateContent(Templates.Character)));
             //var player = new Player("player", LoadTemplate(Templates.Test), new Vector2(200, 200), 100f,
             //    new KeyboardMovement(), this, new RectangleCollider(LoadTemplate(Templates.Test)));
             var levelBackground = new LevelBackground("obstacle", LoadTemplate(Templates.Test), new Vector2(100, 100));
@@ -53,7 +53,7 @@ namespace DadSimulator
                 new RectangleCollider(LoadTemplate(Templates.Test)));
             var washMaschine = new WashingMachine(LoadTemplate(Templates.Test), new Vector2(200, 50),
                 new RectangleCollider(LoadTemplate(Templates.Test)),
-                new RectangleCollider(new Rectangle(new Point(190, 490), new Point(220, 520))));
+                new RectangleCollider(new Rectangle(150, 0, 300, 300)));
 
             m_gameObjects.Add(levelBackground);
             m_gameObjects.Add(levelObstacle);

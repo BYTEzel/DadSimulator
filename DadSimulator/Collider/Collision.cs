@@ -85,9 +85,9 @@ namespace DadSimulator.Collider
             y2 = 0;
             isInitialized = false;
 
-            foreach (var point in comparePc.PointCloud.PointsInOrigin)
+            foreach (var point in refPc.PointCloud.PointsInOrigin)
             {
-                if (refPc.PointCloud.PointsInOrigin.FindIndex(x =>
+                if (comparePc.PointCloud.PointsInOrigin.FindIndex(x =>
                     x.X + refShiftX == point.X + compareShiftX &&
                     x.Y + refShiftY == point.Y + compareShiftY) > -1)
                 {
