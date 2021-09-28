@@ -8,6 +8,5 @@ namespace DadSimulator.Collider
         void AddRectangle(Rectangle rectangle);
         void AddAlignedPointCloud(AlignedPointCloud apc);
         bool Intersect(AlignedPointCloud apc);
-        bool Intersect(ICollider collider);
     }
 }

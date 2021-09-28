@@ -83,11 +83,6 @@ namespace DadSimulator.Collider
             return intersect;
         }
 
-        public bool Intersect(ICollider collider)
-        {
-            return Intersect(collider.GetAlignedPointCloud());
-        }
-
         private bool IsInMap(Point point)
         {
             return IsInRange(point.X, 0, m_map.GetLength(0)) && IsInRange(point.Y, 0, m_map.GetLength(1));
