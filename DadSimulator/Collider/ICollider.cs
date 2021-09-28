@@ -6,6 +6,6 @@
         /// Get the point cloud which is stored within the implementing class.
         /// </summary>
         /// <returns>Aligned points.</returns>
-        PointCloud GetPointCloud();
+        AlignedPointCloud GetAlignedPointCloud();
     }
 }
