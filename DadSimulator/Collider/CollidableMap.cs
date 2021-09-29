@@ -1,15 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DadSimulator.Collider
 {
     public struct Size
     {
-        public int Width;
-        public int Height;
+        public uint Width;
+        public uint Height;
     }
 
     public class CollidableMap : ICollisionChecker
@@ -21,6 +18,11 @@ namespace DadSimulator.Collider
         public CollidableMap(Size size)
         {
             m_map = new Color[size.Width, size.Height];
+        }
+
+        public CollidableMap(Color[,] map)
+        {
+            m_map = map;
         }
 
 
@@ -65,7 +67,7 @@ namespace DadSimulator.Collider
         /// </summary>
         /// <param name="apc">Points to be checked for intersecting with a border.</param>
         /// <returns>True, if a point intersects, false if no intersection occurs or if points are out of bounds.</returns>
-        public bool Intersect(AlignedPointCloud apc)
+        public bool IsColliding(AlignedPointCloud apc)
         {
             bool intersect = false;
             foreach (var pointOrigin in apc.PointCloud.PointsInOrigin)
@@ -90,7 +92,7 @@ namespace DadSimulator.Collider
 
         private bool IsInRange(int number, int lowerBound, int upperBound)
         {
-            return number >= lowerBound && number <= upperBound;
+            return number >= lowerBound && number < upperBound;
         }
 
         public void AddTextureContent(Color[,] content, Vector2 shift)

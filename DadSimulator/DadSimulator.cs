@@ -111,13 +111,13 @@ namespace DadSimulator
             switch (name)
             {
                 case Templates.Character:
-                    stringName = "Smiley";
+                    stringName = "Test/block";
                     break;
                 case Templates.Test:
-                    stringName = "Test/test-blank";
+                    stringName = "Test/block";
                     break;
                 case Templates.TestTextureTransparency:
-                    stringName = "Test/smiley-test";
+                    stringName = "Test/collider-test";
                     break;
                     
                 default:
