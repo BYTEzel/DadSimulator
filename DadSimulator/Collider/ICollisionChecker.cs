@@ -28,11 +28,5 @@ namespace DadSimulator.Collider
         /// <param name="apc">Points to be checked for intersecting with a border.</param>
         /// <returns>True, if a point intersects, false if no intersection occurs or if points are out of bounds.</returns>
         bool IsColliding(AlignedPointCloud apc);
-        /// <summary>
-        /// Checks, if the collidable object collides with the point cloud by using its aligned point cloud.
-        /// </summary>
-        /// <param name="collidable"></param>
-        /// <returns></returns>
-        bool IsColliding(ICollidable collidable);
     }
 }

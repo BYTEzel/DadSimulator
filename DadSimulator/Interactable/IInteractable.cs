@@ -1,4 +1,5 @@
 ﻿using DadSimulator.Collider;
+using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
 namespace DadSimulator.Interactable
@@ -33,9 +34,10 @@ namespace DadSimulator.Interactable
         /// <param name="key">Key corresponding to a command.</param>
         void ExecuteCommand(char key);
         /// <summary>
-        /// Get the point cloud which is stored within the implementing class.
+        /// Get the location of the object. This can be used for the player to check,
+        /// if the object is in reach to be interacted with.
         /// </summary>
-        /// <returns>Aligned points.</returns>
-        AlignedPointCloud GetInteractableAlignedPointCloud();
+        /// <returns>Location of the interaction object.</returns>
+        Point GetLocation();
     }
 }

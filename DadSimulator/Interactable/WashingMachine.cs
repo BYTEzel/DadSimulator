@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace DadSimulator.Interactable
 {
-    public class WashingMachine : IInteractable, ICollidable, IGraphicObject
+    public class WashingMachine : IInteractable, IGraphicObject
     {
         private bool m_isRunning;
         private const char m_switchOn = '1';

@@ -107,10 +107,5 @@ namespace DadSimulator.Collider
                 }
             }
         }
-
-        public bool IsColliding(ICollidable collidable)
-        {
-            return IsColliding(collidable.GetColliderAlignedPointCloud());
-        }
     }
 }
