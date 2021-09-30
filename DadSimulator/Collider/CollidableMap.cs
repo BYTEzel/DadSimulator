@@ -61,12 +61,6 @@ namespace DadSimulator.Collider
             }
         }
 
-        /// <summary>
-        /// Checks, if all points in the point cloud are intersecting with the borders 
-        /// provided in the internal map.
-        /// </summary>
-        /// <param name="apc">Points to be checked for intersecting with a border.</param>
-        /// <returns>True, if a point intersects, false if no intersection occurs or if points are out of bounds.</returns>
         public bool IsColliding(AlignedPointCloud apc)
         {
             bool intersect = false;
