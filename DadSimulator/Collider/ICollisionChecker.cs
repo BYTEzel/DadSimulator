@@ -8,5 +8,6 @@ namespace DadSimulator.Collider
         void AddRectangle(Rectangle rectangle);
         void AddAlignedPointCloud(AlignedPointCloud apc);
         bool IsColliding(AlignedPointCloud apc);
+        bool IsColliding(ICollidable collidable);
     }
 }
