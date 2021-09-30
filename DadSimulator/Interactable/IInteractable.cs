@@ -1,5 +1,4 @@
-﻿using DadSimulator.Collider;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
 namespace DadSimulator.Interactable

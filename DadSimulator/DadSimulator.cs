@@ -15,6 +15,7 @@ namespace DadSimulator
         private SpriteBatch m_spriteBatch;
         private List<IGraphicObject> m_gameObjects;
         private List<IInteractable> m_interactables;
+        private SpriteFont m_font;
 
         public DadSimulator()
         {
@@ -32,6 +33,8 @@ namespace DadSimulator
             m_graphics.PreferredBackBufferWidth = 1920;
             m_graphics.PreferredBackBufferHeight = 1280;
             m_graphics.ApplyChanges();
+
+            m_font = Content.Load<SpriteFont>("Content/Fonts/Arial");
         }
 
         protected override void Initialize()
@@ -87,6 +90,7 @@ namespace DadSimulator
             {
                 gameObj.Draw(m_spriteBatch);
             }
+            m_spriteBatch.DrawString(m_font, "MOIN", new Vector2(12, 12), Color.Black);
             m_spriteBatch.End();
             
 
