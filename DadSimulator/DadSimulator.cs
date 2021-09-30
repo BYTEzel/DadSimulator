@@ -42,9 +42,9 @@ namespace DadSimulator
         protected override void LoadContent()
         {
             m_spriteBatch = new SpriteBatch(GraphicsDevice);
-            var collisionMap = new CollidableMap(new Size() { Height = 1000, Width = 1000 });
+            var collisionMap = new CollidableMap(new Size() { Height = 480, Width = 640 });
 
-            var levelBounds = new LevelBounds(this, Templates.TestTextureTransparency, new Vector2(400, 400), collisionMap);
+            var levelBounds = new LevelBounds(this, Templates.LevelWalls, new Vector2(0, 0), collisionMap);
                 
             var player = new Player(LoadTemplate(Templates.Character), new Vector2(200, 200), 
                 new KeyboardMovement(), collisionMap, this); 
@@ -115,7 +115,9 @@ namespace DadSimulator
                 case Templates.TestTextureTransparency:
                     stringName = "Test/collider-test";
                     break;
-                    
+                case Templates.LevelWalls:
+                    stringName = "level-bounds";
+                    break;
                 default:
                     break;
             }
@@ -133,8 +135,7 @@ namespace DadSimulator
             {
                 for (int column = 0; column < texture.Width; column++)
                 {
-                    // Assumes row major ordering of the array.
-                    colors2D[row, column] = colors1D[row * texture.Width + column];
+                    colors2D[column, row] = colors1D[row * texture.Width + column];
                 }
             }
             return colors2D;
