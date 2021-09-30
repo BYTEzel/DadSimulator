@@ -2,34 +2,40 @@
 using DadSimulator.Interactable;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Linq;
+using System.Collections.Generic;
 
 namespace DadSimulator.GraphicObjects
 {
-    public class Player : LevelBounds
+    public class Player : IGraphicObject
     {
-        private readonly float m_speed;
+        private const float m_speed = 100f;
+        private Vector2 m_position;
         private IMovementCommand m_movement;
-        private ICollidableCollection m_collidableCollection;
+        
+        private Texture2D m_texture;
+
+        private ICollider m_collider;
+
+        private ICollisionChecker m_collisionChecker;
         private IInteractableCollection m_interactableCollection;
 
-        public Player(string name, Texture2D texture2D, Vector2 startPosition, 
-            float speed, IMovementCommand movement, ICollidableCollection collidableCollection, 
-            IInteractableCollection interactableCollection, ICollider collider)
-            : base(name, texture2D, startPosition, collider)
+        public Player(Texture2D texture2D, Vector2 startPosition, 
+            IMovementCommand movement, ICollisionChecker collisionChecker, 
+            IInteractableCollection interactableCollection)
         {
-            m_speed = speed;
+            m_texture = texture2D;
+            m_position = startPosition;
             m_movement = movement;
-            m_collidableCollection = collidableCollection;
+            m_collisionChecker = collisionChecker;
             m_interactableCollection = interactableCollection;
+            m_collider = new RectangleCollider(texture2D);
         }
 
-        public override void Initialize()
+        public void Initialize()
         {
-            base.Initialize();
         }
 
-        public override void Update(double elapsedTime)
+        public void Update(double elapsedTime)
         {
             var movements = m_movement.GetDirections();
             if (movements.Count > 0)
@@ -38,8 +44,8 @@ namespace DadSimulator.GraphicObjects
                 var allInteractable = m_interactableCollection.GetInteractables();
                 foreach (var interactable in allInteractable)
                 {
-                    var intersectResult = Collision.Intersection(m_alignedPointCloud, interactable.GetInteractableAlignedPointCloud());
                 /*
+                    var intersectResult = Collision.Intersection(m_alignedPointCloud, interactable.GetInteractableAlignedPointCloud());
                     if (IntersectionType.Equal == intersectResult.Type || IntersectionType.Intersection == intersectResult.Type)
                     {
                         var name = interactable.GetName();
@@ -48,87 +54,83 @@ namespace DadSimulator.GraphicObjects
                 */
                 }
             }
-            base.Update(elapsedTime);
         }
 
-        private void HandleCollisions(double elapsedTime, System.Collections.Generic.List<Directions> movements)
+        private void HandleCollisions(double elapsedTime, List<Directions> movements)
         {
-            var estimatedShift = new Vector2(Position.X, Position.Y);
-            var allColliders = m_collidableCollection.GetCollectibleList().Where(x => x.GetName() != m_name);
-
             foreach (var mov in movements)
             {
-                estimatedShift = ComputeEstimatedShift(elapsedTime, estimatedShift, mov);
-                estimatedShift = CheckCollisionsWithEstimatedShiftAndCorrect(estimatedShift, allColliders, mov);
+                var deltaMovement = ComputeEstimatedShift(elapsedTime, mov);
+                deltaMovement = CheckCollisionsWithEstimatedShiftAndCorrect(deltaMovement, mov);
+                m_position += deltaMovement;
             }
-
-            Position = estimatedShift;
         }
 
-        private Vector2 CheckCollisionsWithEstimatedShiftAndCorrect(Vector2 estimatedShift, System.Collections.Generic.IEnumerable<ICollidable> allColliders, Directions mov)
+        private Vector2 CheckCollisionsWithEstimatedShiftAndCorrect(Vector2 deltaMovement, Directions mov)
         {
-            foreach (var collider in allColliders)
+            var correctedDelta = deltaMovement;
+            var newPosition = m_position + correctedDelta;
+            
+            var apc = new AlignedPointCloud()
             {
-                var estimatedAlignedPointCloud = new AlignedPointCloud() { PointCloud = m_alignedPointCloud.PointCloud, Shift = estimatedShift };
-                var intersectResult = Collision.Intersection(estimatedAlignedPointCloud, collider.GetColliderAlignedPointCloud());
-                if (IntersectionType.Equal == intersectResult.Type || IntersectionType.Intersection == intersectResult.Type)
-                {
-                    estimatedShift = CorrectEstimatedShift(estimatedShift, mov, intersectResult);
-                }
+                PointCloud = new PointCloud() { PointsInOrigin = m_collider.GetPointCloud().PointsInOrigin },
+                Shift = newPosition
+            };
+
+            if (m_collisionChecker.IsColliding(apc))
+            {
+                correctedDelta = CorrectEstimatedShift(correctedDelta, mov);
             }
 
-            return estimatedShift;
+            return correctedDelta;
         }
 
-        private static Vector2 CorrectEstimatedShift(Vector2 estimatedShift, Directions mov, IntersectionResult intersectResult)
+        private static Vector2 CorrectEstimatedShift(Vector2 deltaMovement, Directions mov)
         {
             switch (mov)
             {
                 case Directions.Up:
-                    estimatedShift.Y = (int)estimatedShift.Y + intersectResult.AlignedBoundingBox.Rectangle.Height + 1;
+                case Directions.Down:
+                    deltaMovement.Y = 0;
                     break;
                 case Directions.Right:
-                    estimatedShift.X = (int)estimatedShift.X - (intersectResult.AlignedBoundingBox.Rectangle.Width + 1);
-                    break;
-                case Directions.Down:
-                    estimatedShift.Y = (int)estimatedShift.Y - (intersectResult.AlignedBoundingBox.Rectangle.Height + 1);
-                    break;
                 case Directions.Left:
-                    estimatedShift.X = (int)estimatedShift.X + intersectResult.AlignedBoundingBox.Rectangle.Width + 1;
+                    deltaMovement.X = 0;
                     break;
                 default:
                     break;
             }
 
-            return estimatedShift;
+            return deltaMovement;
         }
 
-        private Vector2 ComputeEstimatedShift(double elapsedTime, Vector2 estimatedShift, Directions mov)
+        private Vector2 ComputeEstimatedShift(double elapsedTime, Directions mov)
         {
+            var delta = Vector2.Zero;
             switch (mov)
             {
                 case Directions.Up:
-                    estimatedShift.Y -= m_speed * (float)elapsedTime;
+                    delta.Y = - m_speed * (float)elapsedTime;
                     break;
                 case Directions.Right:
-                    estimatedShift.X += m_speed * (float)elapsedTime;
+                    delta.X = m_speed * (float)elapsedTime;
                     break;
                 case Directions.Down:
-                    estimatedShift.Y += m_speed * (float)elapsedTime;
+                    delta.Y = m_speed * (float)elapsedTime;
                     break;
                 case Directions.Left:
-                    estimatedShift.X -= m_speed * (float)elapsedTime;
+                    delta.X = - m_speed * (float)elapsedTime;
                     break;
                 default:
                     break;
             }
 
-            return estimatedShift;
+            return delta;
         }
 
-        public override void Draw(SpriteBatch batch)
+        public void Draw(SpriteBatch batch)
         {
-            base.Draw(batch);
+            batch.Draw(m_texture, m_position, null, Color.Red);
         }
     }
 }

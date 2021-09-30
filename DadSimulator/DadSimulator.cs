@@ -9,12 +9,11 @@ using System.Collections.Generic;
 
 namespace DadSimulator
 {
-    public class DadSimulator : Game, ITemplateLoader, ICollidableCollection, IInteractableCollection
+    public class DadSimulator : Game, ITemplateLoader, IInteractableCollection
     {
         private GraphicsDeviceManager m_graphics;
         private SpriteBatch m_spriteBatch;
         private List<IGraphicObject> m_gameObjects;
-        private List<ICollidable> m_collidableObjects;
         private List<IInteractable> m_interactables;
 
         public DadSimulator()
@@ -23,7 +22,6 @@ namespace DadSimulator
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             m_gameObjects = new List<IGraphicObject>();
-            m_collidableObjects = new List<ICollidable>();
             m_interactables = new List<IInteractable>();
         }
 
@@ -44,25 +42,23 @@ namespace DadSimulator
         protected override void LoadContent()
         {
             m_spriteBatch = new SpriteBatch(GraphicsDevice);
-            var player = new Player("player", LoadTemplate(Templates.Character), new Vector2(200, 200), 100f, 
-                new KeyboardMovement(), this, this, new TextureCollider(LoadTemplateContent(Templates.Character)));
-            //var player = new Player("player", LoadTemplate(Templates.Test), new Vector2(200, 200), 100f,
-            //    new KeyboardMovement(), this, new RectangleCollider(LoadTemplate(Templates.Test)));
-            var levelBackground = new LevelBackground("obstacle", LoadTemplate(Templates.Test), new Vector2(100, 100));
-            var levelObstacle = new LevelBounds("bounds", LoadTemplate(Templates.Test), new Vector2(400, 400), 
-                new RectangleCollider(LoadTemplate(Templates.Test)));
+            var collisionMap = new CollidableMap(new Size() { Height = 1000, Width = 1000 });
+
+            var levelBounds = new LevelBounds(this, Templates.TestTextureTransparency, new Vector2(400, 400), collisionMap);
+                
+            var player = new Player(LoadTemplate(Templates.Character), new Vector2(200, 200), 
+                new KeyboardMovement(), collisionMap, this); 
+                
+                
+                
             var washMaschine = new WashingMachine(LoadTemplate(Templates.Test), new Vector2(200, 50),
                 new RectangleCollider(LoadTemplate(Templates.Test)),
                 new RectangleCollider(new Rectangle(150, 0, 300, 300)));
 
-            m_gameObjects.Add(levelBackground);
-            m_gameObjects.Add(levelObstacle);
+            m_gameObjects.Add(levelBounds);
             m_gameObjects.Add(washMaschine);
             m_gameObjects.Add(player);
 
-            m_collidableObjects.Add(levelObstacle);
-            m_collidableObjects.Add(washMaschine);
-            m_collidableObjects.Add(player);
 
             m_interactables.Add(washMaschine);
             // TODO: use this.Content to load your game content here
@@ -125,11 +121,6 @@ namespace DadSimulator
             }
 
             return Content.Load<Texture2D>(stringName);
-        }
-
-        public List<ICollidable> GetCollectibleList()
-        {
-            return m_collidableObjects;
         }
 
         public Color[,] LoadTemplateContent(Templates name)
