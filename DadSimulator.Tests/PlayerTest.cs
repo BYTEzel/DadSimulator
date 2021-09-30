@@ -34,12 +34,7 @@ namespace DadSimulator.Tests
         [SetUp]
         public void Setup()
         {
-            using (var sim = new DadSimulator())
-            {
-                sim.RunOneFrame();
-                ITemplateLoader loader = sim;
-                m_texture = loader.LoadTemplate(Templates.Test);
-            }
+            m_texture = GraphicsLoader.LoadTemplate(Templates.Test);
         }
 
         [Test]
