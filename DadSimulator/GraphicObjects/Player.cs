@@ -9,6 +9,7 @@ namespace DadSimulator.GraphicObjects
     public class Player : IGraphicObject
     {
         private const float m_speed = 100f;
+        private const float m_interactionRadius = 20f;
         public Vector2 Position { get; private set; }
         private IMovementCommand m_movement;
         
@@ -46,12 +47,15 @@ namespace DadSimulator.GraphicObjects
                     var allInteractable = m_interactableCollection.GetInteractables();
                     foreach (var interactable in allInteractable)
                     {
+                        if (m_interactionRadius >= Vector2.Distance(Position, interactable.GetLocation()))
+                        {
+                            var name = interactable.GetName();
+                            var state = interactable.GetState();
+                        }
                         /*
                             var intersectResult = Collision.Intersection(m_alignedPointCloud, interactable.GetInteractableAlignedPointCloud());
                             if (IntersectionType.Equal == intersectResult.Type || IntersectionType.Intersection == intersectResult.Type)
                             {
-                                var name = interactable.GetName();
-                                var state = interactable.GetState();
                             }
                         */
                     }

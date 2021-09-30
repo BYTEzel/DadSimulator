@@ -38,6 +38,6 @@ namespace DadSimulator.Interactable
         /// if the object is in reach to be interacted with.
         /// </summary>
         /// <returns>Location of the interaction object.</returns>
-        Point GetLocation();
+        Vector2 GetLocation();
     }
 }

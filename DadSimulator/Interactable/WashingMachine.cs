@@ -1,5 +1,4 @@
-﻿using DadSimulator.Collider;
-using DadSimulator.GraphicObjects;
+﻿using DadSimulator.GraphicObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -11,14 +10,14 @@ namespace DadSimulator.Interactable
         private bool m_isRunning;
         private const char m_switchOn = '1';
         private readonly Texture2D m_texture;
-        private AlignedPointCloud m_alignedPointCloudCollider, m_alignedPointCloudInteraction;
+        private Vector2 m_position, m_interactionPosition;
 
-        public WashingMachine(Texture2D texture, Vector2 position, ICollider collisionDetection, ICollider interactionCollider)
+        public WashingMachine(Texture2D texture, Vector2 position, Vector2 interactionPosition)
         {
             m_isRunning = false;
             m_texture = texture;
-            m_alignedPointCloudCollider = new AlignedPointCloud { Shift = position, PointCloud = collisionDetection.GetPointCloud() };
-            m_alignedPointCloudInteraction = new AlignedPointCloud { Shift = position, PointCloud = interactionCollider.GetPointCloud() };
+            m_position = position;
+            m_interactionPosition = interactionPosition;
         }
 
         public void ExecuteCommand(char key)
@@ -71,22 +70,13 @@ namespace DadSimulator.Interactable
 
         public void Draw(SpriteBatch batch)
         {
-            batch.Draw(m_texture, m_alignedPointCloudCollider.Shift, null, Color.Red);
+            batch.Draw(m_texture, m_position, null, Color.Red);
         }
 
-        public void SetShift(Vector2 shift)
-        {
-            m_alignedPointCloudCollider.Shift = shift;
-        }
 
-        public AlignedPointCloud GetInteractableAlignedPointCloud()
+        public Vector2 GetLocation()
         {
-            return m_alignedPointCloudInteraction;
-        }
-
-        public AlignedPointCloud GetColliderAlignedPointCloud()
-        {
-            return m_alignedPointCloudCollider;
+            return m_interactionPosition;
         }
     }
 }

@@ -49,9 +49,8 @@ namespace DadSimulator
             var player = new Player(LoadTemplate(Templates.Character), new Vector2(200, 200), 
                 new KeyboardMovement(), collisionMap, this); 
                 
-            var washMaschine = new WashingMachine(LoadTemplate(Templates.Test), new Vector2(200, 50),
-                new RectangleCollider(LoadTemplate(Templates.Test)),
-                new RectangleCollider(new Rectangle(150, 0, 300, 300)));
+            var washMaschine = new WashingMachine(LoadTemplate(Templates.Test), 
+                new Vector2(200, 50), new Vector2(201, 51));
 
             m_gameObjects.Add(levelBounds);
             m_gameObjects.Add(washMaschine);
