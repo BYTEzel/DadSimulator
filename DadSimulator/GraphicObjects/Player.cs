@@ -9,7 +9,7 @@ namespace DadSimulator.GraphicObjects
     public class Player : IGraphicObject
     {
         private const float m_speed = 100f;
-        private Vector2 m_position;
+        public Vector2 Position { get; private set; }
         private IMovementCommand m_movement;
         
         private Texture2D m_texture;
@@ -24,7 +24,7 @@ namespace DadSimulator.GraphicObjects
             IInteractableCollection interactableCollection)
         {
             m_texture = texture2D;
-            m_position = startPosition;
+            Position = startPosition;
             m_movement = movement;
             m_collisionChecker = collisionChecker;
             m_interactableCollection = interactableCollection;
@@ -41,17 +41,20 @@ namespace DadSimulator.GraphicObjects
             if (movements.Count > 0)
             {
                 HandleCollisions(elapsedTime, movements);
-                var allInteractable = m_interactableCollection.GetInteractables();
-                foreach (var interactable in allInteractable)
+                if (m_interactableCollection != null)
                 {
-                /*
-                    var intersectResult = Collision.Intersection(m_alignedPointCloud, interactable.GetInteractableAlignedPointCloud());
-                    if (IntersectionType.Equal == intersectResult.Type || IntersectionType.Intersection == intersectResult.Type)
+                    var allInteractable = m_interactableCollection.GetInteractables();
+                    foreach (var interactable in allInteractable)
                     {
-                        var name = interactable.GetName();
-                        var state = interactable.GetState();
+                        /*
+                            var intersectResult = Collision.Intersection(m_alignedPointCloud, interactable.GetInteractableAlignedPointCloud());
+                            if (IntersectionType.Equal == intersectResult.Type || IntersectionType.Intersection == intersectResult.Type)
+                            {
+                                var name = interactable.GetName();
+                                var state = interactable.GetState();
+                            }
+                        */
                     }
-                */
                 }
             }
         }
@@ -62,26 +65,29 @@ namespace DadSimulator.GraphicObjects
             {
                 var deltaMovement = ComputeEstimatedShift(elapsedTime, mov);
                 deltaMovement = CheckCollisionsWithEstimatedShiftAndCorrect(deltaMovement, mov);
-                m_position += deltaMovement;
+                Position += deltaMovement;
             }
         }
 
         private Vector2 CheckCollisionsWithEstimatedShiftAndCorrect(Vector2 deltaMovement, Directions mov)
         {
             var correctedDelta = deltaMovement;
-            var newPosition = m_position + correctedDelta;
-            
-            var apc = new AlignedPointCloud()
-            {
-                PointCloud = new PointCloud() { PointsInOrigin = m_collider.GetPointCloud().PointsInOrigin },
-                Shift = newPosition
-            };
 
-            if (m_collisionChecker.IsColliding(apc))
+            if (m_collisionChecker != null)
             {
-                correctedDelta = CorrectEstimatedShift(correctedDelta, mov);
+                var newPosition = Position + correctedDelta;
+
+                var apc = new AlignedPointCloud()
+                {
+                    PointCloud = new PointCloud() { PointsInOrigin = m_collider.GetPointCloud().PointsInOrigin },
+                    Shift = newPosition
+                };
+
+                if (m_collisionChecker.IsColliding(apc))
+                {
+                    correctedDelta = CorrectEstimatedShift(correctedDelta, mov);
+                }
             }
-
             return correctedDelta;
         }
 
@@ -130,7 +136,8 @@ namespace DadSimulator.GraphicObjects
 
         public void Draw(SpriteBatch batch)
         {
-            batch.Draw(m_texture, m_position, null, Color.Red);
+            batch.Draw(m_texture, Position, null, Color.Red);
         }
+
     }
 }
