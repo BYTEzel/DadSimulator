@@ -7,6 +7,13 @@ namespace DadSimulator.GraphicObjects
 {
     class KeyboardMovement : IMovementCommand
     {
+        private const Keys m_actionKey = Keys.E;
+
+        public char GetActionKey()
+        {
+            return m_actionKey.ToString().ToCharArray()[0];
+        }
+
         public List<Directions> GetDirections()
         {
             var commandList = new List<Directions>();
@@ -33,6 +40,12 @@ namespace DadSimulator.GraphicObjects
             }
 
             return commandList;
+        }
+
+        public bool IsActionKeyPressed()
+        {
+            var keyboard = Keyboard.GetState();
+            return keyboard.IsKeyDown(m_actionKey);
         }
     }
 }

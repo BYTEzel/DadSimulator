@@ -7,5 +7,7 @@ namespace DadSimulator.GraphicObjects
     public interface IMovementCommand
     {
         List<Directions> GetDirections();
+        bool IsActionKeyPressed();
+        char GetActionKey();
     }
 }

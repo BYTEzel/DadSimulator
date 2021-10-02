@@ -1,14 +1,12 @@
 ﻿using DadSimulator.GraphicObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
 
 namespace DadSimulator.Interactable
 {
     public class WashingMachine : IInteractable, IGraphicObject
     {
         private bool m_isRunning;
-        private const char m_switchOn = '1';
         private readonly Texture2D m_texture;
         private Vector2 m_position, m_interactionPosition;
 
@@ -20,12 +18,9 @@ namespace DadSimulator.Interactable
             m_interactionPosition = interactionPosition;
         }
 
-        public void ExecuteCommand(char key)
+        public void ExecuteCommand()
         {
-            if (m_switchOn == key)
-            {
-                SwitchMachineOn();
-            }
+            SwitchMachineOn();
         }
 
         private void SwitchMachineOn()
@@ -34,13 +29,9 @@ namespace DadSimulator.Interactable
         }
 
 
-        public List<Command> GetCommands()
+        public string GetCommand()
         {
-            if (m_isRunning)
-            {
-                return new List<Command>() { new Command() { Description = "Switch on", Key = m_switchOn } };
-            }
-            return new List<Command>();
+            return m_isRunning ? null : "Switch on";
         }
 
         public string GetName()

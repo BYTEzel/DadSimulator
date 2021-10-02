@@ -22,16 +22,14 @@ namespace DadSimulator.Interactable
         /// <returns>Description of the state.</returns>
         string GetState();
         /// <summary>
-        /// Get the list of available commands.
+        /// Get the available commands.
         /// </summary>
-        /// <returns>List of commands which can be executed.</returns>
-        List<Command> GetCommands();
+        /// <returns>Command which can be executed.</returns>
+        string GetCommand();
         /// <summary>
-        /// Key corresponding to the respective command.
-        /// A list of commands, including their keys can be retrieved by calling GetCommands().
+        /// Command of GetCommand() is executed.
         /// </summary>
-        /// <param name="key">Key corresponding to a command.</param>
-        void ExecuteCommand(char key);
+        void ExecuteCommand();
         /// <summary>
         /// Get the location of the object. This can be used for the player to check,
         /// if the object is in reach to be interacted with.

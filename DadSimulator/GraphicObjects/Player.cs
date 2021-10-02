@@ -23,6 +23,8 @@ namespace DadSimulator.GraphicObjects
 
         private readonly IUiEngine m_ui;
 
+        private readonly char m_actionKey;
+
         internal struct UiRectInteractable
         {
             public Point PositionTopLeft;
@@ -46,6 +48,7 @@ namespace DadSimulator.GraphicObjects
             m_collider = new RectangleCollider(texture2D);
             m_ui = gui;
             m_uiRectsToDraw = new List<UiRectInteractable>();
+            m_actionKey = m_movement.GetActionKey();
         }
 
         public void Initialize()
@@ -54,35 +57,41 @@ namespace DadSimulator.GraphicObjects
 
         public void Update(double elapsedTime)
         {
+            m_uiRectsToDraw.Clear();
+
             var movements = m_movement.GetDirections();
             if (movements.Count > 0)
             {
-                m_uiRectsToDraw.Clear();
                 HandleCollisions(elapsedTime, movements);
-                if (m_interactableCollection != null)
+            }
+
+            if (m_interactableCollection != null)
+            {
+                var allInteractable = m_interactableCollection.GetInteractables();
+                foreach (var interactable in allInteractable)
                 {
-                    var allInteractable = m_interactableCollection.GetInteractables();
-                    foreach (var interactable in allInteractable)
+                    var interactablePosition = interactable.GetLocation();
+                    if (m_interactionRadius >= Vector2.Distance(Position, interactablePosition))
                     {
-                        var interactablePosition = interactable.GetLocation();
-                        if (m_interactionRadius >= Vector2.Distance(Position, interactablePosition))
+                        var name = interactable.GetName();
+                        var text = $"State: {interactable.GetState()}";
+                        var command = interactable.GetCommand();
+                        if (!string.IsNullOrEmpty(command))
                         {
-                            var name = interactable.GetName();
-                            var state = interactable.GetState();
-                            m_uiRectsToDraw.Add(new UiRectInteractable()
-                            {
-                                PositionTopLeft = new Point((int)interactablePosition.X, (int)interactablePosition.Y),
-                                RectColor = Color.Black,
-                                TextHeadline = name,
-                                TextBox = state
-                            });
+                            text += $"\n[{m_actionKey}] to {command}";
                         }
-                        /*
-                            var intersectResult = Collision.Intersection(m_alignedPointCloud, interactable.GetInteractableAlignedPointCloud());
-                            if (IntersectionType.Equal == intersectResult.Type || IntersectionType.Intersection == intersectResult.Type)
-                            {
-                            }
-                        */
+                        m_uiRectsToDraw.Add(new UiRectInteractable()
+                        {
+                            PositionTopLeft = new Point((int)interactablePosition.X, (int)interactablePosition.Y),
+                            RectColor = Color.Black,
+                            TextHeadline = name,
+                            TextBox = text
+                        });
+
+                        if (m_movement.IsActionKeyPressed())
+                        {
+                            interactable.ExecuteCommand();
+                        }
                     }
                 }
             }
