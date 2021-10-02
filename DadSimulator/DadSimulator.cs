@@ -17,6 +17,7 @@ namespace DadSimulator
         private List<IGraphicObject> m_gameObjects;
         private List<IInteractable> m_interactables;
         private SpriteFont m_font;
+        private IUiEngine m_uiEngine;
 
         public DadSimulator()
         {
@@ -36,6 +37,7 @@ namespace DadSimulator
             m_graphics.ApplyChanges();
 
             m_font = Content.Load<SpriteFont>("Content/Fonts/Arial");
+            m_spriteBatch = new SpriteBatch(GraphicsDevice);
         }
 
         protected override void Initialize()
@@ -45,13 +47,14 @@ namespace DadSimulator
 
         protected override void LoadContent()
         {
-            m_spriteBatch = new SpriteBatch(GraphicsDevice);
+            m_uiEngine = new UiEngine(GraphicsDevice, m_spriteBatch, m_font, m_font);
+
             var collisionMap = new CollidableMap(new Size() { Height = 480, Width = 640 });
 
             var levelBounds = new LevelBounds(this, Templates.LevelWalls, new Vector2(0, 0), collisionMap);
                 
             var player = new Player(LoadTemplate(Templates.Character), new Vector2(200, 200), 
-                new KeyboardMovement(), collisionMap, this, new UiEngine(GraphicsDevice, m_font, m_font)); 
+                new KeyboardMovement(), collisionMap, this, m_uiEngine); 
                 
             var washMaschine = new WashingMachine(LoadTemplate(Templates.Test), 
                 new Vector2(200, 50), new Vector2(201, 51));
@@ -91,11 +94,22 @@ namespace DadSimulator
             {
                 gameObj.Draw(m_spriteBatch);
             }
-            m_spriteBatch.DrawString(m_font, "MOIN", new Vector2(12, 12), Color.Black);
+
+            m_uiEngine.DrawText(Vector2.One, Color.White, ComputeGameTime(gameTime), true);
+
             m_spriteBatch.End();
-            
+
 
             base.Draw(gameTime);
+        }
+
+        private string ComputeGameTime(GameTime time)
+        {
+            var realTime = time.TotalGameTime.TotalSeconds;
+            var gameTime = System.TimeSpan.FromSeconds(realTime * 60);
+            var days = new List<string>() { "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY" };
+            var day = days[gameTime.Days%days.Count];
+            return $"{day}, {gameTime.ToString(@"hh\:mm\:ss")}";
         }
 
         public Texture2D LoadTemplate(Templates name)

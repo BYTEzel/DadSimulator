@@ -178,7 +178,6 @@ namespace DadSimulator.GraphicObjects
             foreach (var boxParams in m_uiRectsToDraw)
             {
                 m_ui.DrawRectangleInteractable(
-                    batch,
                     boxParams.PositionTopLeft,
                     boxParams.RectColor,
                     boxParams.TextHeadline,

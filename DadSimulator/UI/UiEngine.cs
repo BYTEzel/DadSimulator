@@ -7,13 +7,15 @@ namespace DadSimulator.UI
     {
         private readonly Texture2D m_rectBase;
         private readonly SpriteFont m_fontHeadline, m_fontText;
+        private readonly SpriteBatch m_spriteBatch;
 
-        public UiEngine(GraphicsDevice graphics, SpriteFont fontHeadline, SpriteFont fontText)
+        public UiEngine(GraphicsDevice graphics, SpriteBatch batch, SpriteFont fontHeadline, SpriteFont fontText)
         {
             m_rectBase = new Texture2D(graphics, 1, 1);
             m_rectBase.SetData(new[] { Color.White });
             m_fontHeadline = fontHeadline;
             m_fontText = fontText;
+            m_spriteBatch = batch;
         }
 
         ~UiEngine()
@@ -21,12 +23,12 @@ namespace DadSimulator.UI
             m_rectBase.Dispose();
         }
 
-        public void DrawRectangle(SpriteBatch batch, Rectangle rect, Color color)
+        public void DrawRectangle(Rectangle rect, Color color)
         {
-            batch.Draw(m_rectBase, rect, color);
+            m_spriteBatch.Draw(m_rectBase, rect, color);
         }
 
-        public void DrawRectangleInteractable(SpriteBatch batch, Point positionTopLeft, Color color, string headline, string textInBox)
+        public void DrawRectangleInteractable(Point positionTopLeft, Color color, string headline, string textInBox)
         {
             var textSizeHeadline = m_fontHeadline.MeasureString(headline);
             var textSizeInBox = m_fontText.MeasureString(textInBox);
@@ -38,9 +40,16 @@ namespace DadSimulator.UI
                     (int)System.Math.Max(textSizeHeadline.X, textSizeInBox.X) + padding * 2,
                     (int)(textSizeHeadline.Y + textSizeInBox.Y) + padding * 2));
 
-            DrawRectangle(batch, rectangle, color);
-            batch.DrawString(m_fontHeadline, headline, new Vector2(positionTopLeft.X + padding, positionTopLeft.Y + padding), Color.White);
-            batch.DrawString(m_fontText, textInBox, new Vector2(positionTopLeft.X + padding, positionTopLeft.Y + textSizeHeadline.Y + padding), Color.White);
+            DrawRectangle(rectangle, color);
+            DrawText(new Vector2(positionTopLeft.X + padding, positionTopLeft.Y + padding), Color.White, headline, true);
+            DrawText(new Vector2(positionTopLeft.X + padding, positionTopLeft.Y + textSizeHeadline.Y + padding), Color.White, textInBox, false);
+        }
+
+        public void DrawText(Vector2 positionTopLeft, Color color, string text, bool isHeadline)
+        {
+            var font = isHeadline ? m_fontHeadline : m_fontText;
+            m_spriteBatch.DrawString(font, text, positionTopLeft, color);
+
         }
     }
 }
