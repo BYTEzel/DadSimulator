@@ -1,5 +1,6 @@
 ﻿using DadSimulator.Collider;
 using DadSimulator.Interactable;
+using DadSimulator.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -11,18 +12,31 @@ namespace DadSimulator.GraphicObjects
         private const float m_speed = 100f;
         private const float m_interactionRadius = 20f;
         public Vector2 Position { get; private set; }
-        private IMovementCommand m_movement;
+        private readonly IMovementCommand m_movement;
         
-        private Texture2D m_texture;
+        private readonly Texture2D m_texture;
 
-        private ICollider m_collider;
+        private readonly ICollider m_collider;
 
-        private ICollisionChecker m_collisionChecker;
-        private IInteractableCollection m_interactableCollection;
+        private readonly ICollisionChecker m_collisionChecker;
+        private readonly IInteractableCollection m_interactableCollection;
+
+        private readonly IUiEngine m_ui;
+
+        internal struct UiRectInteractable
+        {
+            public Point PositionTopLeft;
+            public Color RectColor;
+            public string TextHeadline;
+            public string TextBox;
+        }
+
+        private List<UiRectInteractable> m_uiRectsToDraw;
+
 
         public Player(Texture2D texture2D, Vector2 startPosition, 
             IMovementCommand movement, ICollisionChecker collisionChecker, 
-            IInteractableCollection interactableCollection)
+            IInteractableCollection interactableCollection, IUiEngine gui)
         {
             m_texture = texture2D;
             Position = startPosition;
@@ -30,6 +44,8 @@ namespace DadSimulator.GraphicObjects
             m_collisionChecker = collisionChecker;
             m_interactableCollection = interactableCollection;
             m_collider = new RectangleCollider(texture2D);
+            m_ui = gui;
+            m_uiRectsToDraw = new List<UiRectInteractable>();
         }
 
         public void Initialize()
@@ -41,16 +57,25 @@ namespace DadSimulator.GraphicObjects
             var movements = m_movement.GetDirections();
             if (movements.Count > 0)
             {
+                m_uiRectsToDraw.Clear();
                 HandleCollisions(elapsedTime, movements);
                 if (m_interactableCollection != null)
                 {
                     var allInteractable = m_interactableCollection.GetInteractables();
                     foreach (var interactable in allInteractable)
                     {
-                        if (m_interactionRadius >= Vector2.Distance(Position, interactable.GetLocation()))
+                        var interactablePosition = interactable.GetLocation();
+                        if (m_interactionRadius >= Vector2.Distance(Position, interactablePosition))
                         {
                             var name = interactable.GetName();
                             var state = interactable.GetState();
+                            m_uiRectsToDraw.Add(new UiRectInteractable()
+                            {
+                                PositionTopLeft = new Point((int)interactablePosition.X, (int)interactablePosition.Y),
+                                RectColor = Color.Black,
+                                TextHeadline = name,
+                                TextBox = state
+                            });
                         }
                         /*
                             var intersectResult = Collision.Intersection(m_alignedPointCloud, interactable.GetInteractableAlignedPointCloud());
@@ -141,6 +166,17 @@ namespace DadSimulator.GraphicObjects
         public void Draw(SpriteBatch batch)
         {
             batch.Draw(m_texture, Position, null, Color.Red);
+            foreach (var boxParams in m_uiRectsToDraw)
+            {
+                m_ui.DrawRectangleInteractable(
+                    batch,
+                    boxParams.PositionTopLeft,
+                    boxParams.RectColor,
+                    boxParams.TextHeadline,
+                    boxParams.TextBox
+                    );
+            }
+
         }
 
     }

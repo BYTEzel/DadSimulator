@@ -2,6 +2,7 @@
 using DadSimulator.GraphicObjects;
 using DadSimulator.Interactable;
 using DadSimulator.IO;
+using DadSimulator.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -50,7 +51,7 @@ namespace DadSimulator
             var levelBounds = new LevelBounds(this, Templates.LevelWalls, new Vector2(0, 0), collisionMap);
                 
             var player = new Player(LoadTemplate(Templates.Character), new Vector2(200, 200), 
-                new KeyboardMovement(), collisionMap, this); 
+                new KeyboardMovement(), collisionMap, this, new UiEngine(GraphicsDevice, m_font, m_font)); 
                 
             var washMaschine = new WashingMachine(LoadTemplate(Templates.Test), 
                 new Vector2(200, 50), new Vector2(201, 51));
