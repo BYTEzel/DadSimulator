@@ -2,6 +2,7 @@
 using DadSimulator.GraphicObjects;
 using DadSimulator.Interactable;
 using DadSimulator.IO;
+using DadSimulator.Misc;
 using DadSimulator.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -18,6 +19,7 @@ namespace DadSimulator
         private List<IInteractable> m_interactables;
         private SpriteFont m_font;
         private IUiEngine m_uiEngine;
+        private readonly Timer m_gameTimer;
 
         public DadSimulator()
         {
@@ -26,17 +28,18 @@ namespace DadSimulator
             IsMouseVisible = true;
             m_gameObjects = new List<IGraphicObject>();
             m_interactables = new List<IInteractable>();
+            m_gameTimer = new Timer();
         }
 
         private void InitGraphics()
         {
             m_graphics = new GraphicsDeviceManager(this);
-            //m_graphics.IsFullScreen = true;
+            m_graphics.IsFullScreen = true;
             m_graphics.PreferredBackBufferWidth = 1920;
             m_graphics.PreferredBackBufferHeight = 1280;
             m_graphics.ApplyChanges();
 
-            m_font = Content.Load<SpriteFont>("Content/Fonts/Arial");
+            m_font = Content.Load<SpriteFont>("Content/Fonts/8-bit Operator+");
             m_spriteBatch = new SpriteBatch(GraphicsDevice);
         }
 
@@ -79,7 +82,7 @@ namespace DadSimulator
             {
                 gameObj.Update(gameSeconds);
             }
-
+            m_gameTimer.Update(gameTime);
             // TODO: Add your update logic here
             base.Update(gameTime);
         }
@@ -95,7 +98,7 @@ namespace DadSimulator
                 gameObj.Draw(m_spriteBatch);
             }
 
-            m_uiEngine.DrawText(Vector2.One, Color.White, ComputeGameTime(gameTime), true);
+            m_uiEngine.DrawText(Vector2.One, Color.White, m_gameTimer.GetGameDateAndTime(), true);
 
             m_spriteBatch.End();
 
@@ -103,14 +106,6 @@ namespace DadSimulator
             base.Draw(gameTime);
         }
 
-        private string ComputeGameTime(GameTime time)
-        {
-            var realTime = time.TotalGameTime.TotalSeconds;
-            var gameTime = System.TimeSpan.FromSeconds(realTime * 60);
-            var days = new List<string>() { "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY" };
-            var day = days[gameTime.Days%days.Count];
-            return $"{day}, {gameTime.ToString(@"hh\:mm\:ss")}";
-        }
 
         public Texture2D LoadTemplate(Templates name)
         {
