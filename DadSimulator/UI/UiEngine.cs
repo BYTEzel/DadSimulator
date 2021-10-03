@@ -28,27 +28,32 @@ namespace DadSimulator.UI
             m_spriteBatch.Draw(m_rectBase, rect, color);
         }
 
-        public void DrawRectangleInteractable(Point positionTopLeft, Color color, string headline, string textInBox)
+        public void DrawRectangleInteractable(int xPosition, Color color, string headline, string textInBox)
         {
-            var textSizeHeadline = m_fontHeadline.MeasureString(headline);
-            var textSizeInBox = m_fontText.MeasureString(textInBox);
+            const float scalingHeadline = 0.7f;
+            const float scalingText = 0.5f;
+
+            var textSizeHeadline = m_fontHeadline.MeasureString(headline) * scalingHeadline;
+            var textSizeInBox = m_fontText.MeasureString(textInBox) * scalingText;
             int padding = 10;
+
+            var positionTopLeft = new Point(x: xPosition, y: 50);
 
             var rectangle = new Rectangle(
                 positionTopLeft,
                 new Point(
-                    (int)System.Math.Max(textSizeHeadline.X, textSizeInBox.X) + padding * 2,
-                    (int)(textSizeHeadline.Y + textSizeInBox.Y) + padding * 2));
+                    x: (int)System.Math.Max(textSizeHeadline.X, textSizeInBox.X) + padding * 2,
+                    y: (int)(textSizeHeadline.Y + textSizeInBox.Y) + (padding * 2)));
 
             DrawRectangle(rectangle, color);
-            DrawText(new Vector2(positionTopLeft.X + padding, positionTopLeft.Y + padding), Color.White, headline, true);
-            DrawText(new Vector2(positionTopLeft.X + padding, positionTopLeft.Y + textSizeHeadline.Y + padding), Color.White, textInBox, false);
+            DrawText(new Vector2(positionTopLeft.X + padding, positionTopLeft.Y + padding), Color.White, headline, true, scalingHeadline);
+            DrawText(new Vector2(positionTopLeft.X + padding, positionTopLeft.Y + textSizeHeadline.Y + padding), Color.White, textInBox, false, scalingText);
         }
 
-        public void DrawText(Vector2 positionTopLeft, Color color, string text, bool isHeadline)
+        public void DrawText(Vector2 positionTopLeft, Color color, string text, bool isHeadline, float scaling = 1.0f)
         {
             var font = isHeadline ? m_fontHeadline : m_fontText;
-            m_spriteBatch.DrawString(font, text, positionTopLeft, color);
+            m_spriteBatch.DrawString(font, text, positionTopLeft, color, 0, Vector2.Zero, scaling, SpriteEffects.None, 0);
 
         }
     }

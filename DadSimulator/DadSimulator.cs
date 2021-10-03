@@ -34,7 +34,7 @@ namespace DadSimulator
         private void InitGraphics()
         {
             m_graphics = new GraphicsDeviceManager(this);
-            m_graphics.IsFullScreen = true;
+            //m_graphics.IsFullScreen = true;
             m_graphics.PreferredBackBufferWidth = 1920;
             m_graphics.PreferredBackBufferHeight = 1280;
             m_graphics.ApplyChanges();
@@ -92,7 +92,7 @@ namespace DadSimulator
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            m_spriteBatch.Begin();
+            m_spriteBatch.Begin(samplerState: SamplerState.PointClamp);
             foreach (var gameObj in m_gameObjects)
             {
                 gameObj.Draw(m_spriteBatch);
