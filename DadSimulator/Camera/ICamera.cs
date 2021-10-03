@@ -11,5 +11,7 @@ namespace DadSimulator.Camera
         void Follow(IPosition target);
 
         Vector2 GetCameraTopLeftPosition();
+
+        Vector2 GetScreenCenter();
     }
 }

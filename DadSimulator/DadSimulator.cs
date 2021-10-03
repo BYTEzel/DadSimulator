@@ -26,7 +26,11 @@ namespace DadSimulator
 
         public DadSimulator()
         {
-            m_screenSize = new Size() { Width = 640, Height = 480};
+            m_screenSize = new Size()
+            {
+                Width = 1920,
+                Height = 1200
+            };
             InitGraphics();
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
@@ -38,6 +42,8 @@ namespace DadSimulator
         private void InitGraphics()
         {
             m_graphics = new GraphicsDeviceManager(this);
+            m_graphics.ApplyChanges();
+
             //m_graphics.IsFullScreen = true;
             m_graphics.PreferredBackBufferWidth = (int)m_screenSize.Width;
             m_graphics.PreferredBackBufferHeight = (int)m_screenSize.Height;
@@ -57,7 +63,7 @@ namespace DadSimulator
             m_camera = new Camera.Camera(m_screenSize);
             m_uiEngine = new UiEngine(GraphicsDevice, m_spriteBatch, m_font, m_font, m_camera);
 
-            var collisionMap = new CollidableMap(new Size() { Height = 480, Width = 640 });
+            var collisionMap = new CollidableMap(new Size() { Width = 640, Height = 480 });
 
             var levelBounds = new LevelBounds(this, Templates.LevelWalls, new Vector2(0, 0), collisionMap);
                 

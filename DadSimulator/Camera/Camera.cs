@@ -1,5 +1,4 @@
 ﻿using DadSimulator.Misc;
-using DadSimulator.UI;
 using Microsoft.Xna.Framework;
 
 namespace DadSimulator.Camera
@@ -40,6 +39,11 @@ namespace DadSimulator.Camera
         public void Follow(IPosition target)
         {
             m_target = target;
+        }
+
+        public Vector2 GetScreenCenter()
+        {
+            return m_target.GetPosition();
         }
     }
 }

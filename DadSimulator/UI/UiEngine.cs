@@ -40,7 +40,11 @@ namespace DadSimulator.UI
             var textSizeInBox = m_fontText.MeasureString(textInBox) * scalingText;
             int padding = 10;
 
-            var positionTopLeft = new Point(x: xPosition, y: (int)m_camera.GetCameraTopLeftPosition().Y + 50);
+            var center = m_camera.GetScreenCenter();
+
+            var positionTopLeft = new Point(
+                x: (int)(center.X-padding-(System.Math.Max(textSizeHeadline.X, textSizeInBox.X)/2)), 
+                y: (int)m_camera.GetCameraTopLeftPosition().Y + 50);
 
             var rectangle = new Rectangle(
                 positionTopLeft,
