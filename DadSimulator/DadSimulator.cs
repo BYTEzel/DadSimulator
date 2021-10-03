@@ -54,7 +54,8 @@ namespace DadSimulator
 
         protected override void LoadContent()
         {
-            m_uiEngine = new UiEngine(GraphicsDevice, m_spriteBatch, m_font, m_font);
+            m_camera = new Camera.Camera(m_screenSize);
+            m_uiEngine = new UiEngine(GraphicsDevice, m_spriteBatch, m_font, m_font, m_camera);
 
             var collisionMap = new CollidableMap(new Size() { Height = 480, Width = 640 });
 
@@ -66,15 +67,14 @@ namespace DadSimulator
             var washMaschine = new WashingMachine(LoadTemplate(Templates.Test), 
                 new Vector2(200, 50), new Vector2(201, 51));
 
+
             m_gameObjects.Add(levelBounds);
             m_gameObjects.Add(washMaschine);
             m_gameObjects.Add(player);
 
-
             m_interactables.Add(washMaschine);
 
-            m_camera = new Camera.Camera(m_screenSize, player);
-
+            m_camera.Follow(player);
             // TODO: use this.Content to load your game content here
         }
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using DadSimulator.Camera;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace DadSimulator.UI
@@ -8,14 +9,16 @@ namespace DadSimulator.UI
         private readonly Texture2D m_rectBase;
         private readonly SpriteFont m_fontHeadline, m_fontText;
         private readonly SpriteBatch m_spriteBatch;
+        private readonly ICamera m_camera;
 
-        public UiEngine(GraphicsDevice graphics, SpriteBatch batch, SpriteFont fontHeadline, SpriteFont fontText)
+        public UiEngine(GraphicsDevice graphics, SpriteBatch batch, SpriteFont fontHeadline, SpriteFont fontText, ICamera camera)
         {
             m_rectBase = new Texture2D(graphics, 1, 1);
             m_rectBase.SetData(new[] { Color.White });
             m_fontHeadline = fontHeadline;
             m_fontText = fontText;
             m_spriteBatch = batch;
+            m_camera = camera;
         }
 
         ~UiEngine()
@@ -37,7 +40,7 @@ namespace DadSimulator.UI
             var textSizeInBox = m_fontText.MeasureString(textInBox) * scalingText;
             int padding = 10;
 
-            var positionTopLeft = new Point(x: xPosition, y: 50);
+            var positionTopLeft = new Point(x: xPosition, y: (int)m_camera.GetCameraTopLeftPosition().Y + 50);
 
             var rectangle = new Rectangle(
                 positionTopLeft,

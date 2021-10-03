@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using DadSimulator.Misc;
+using Microsoft.Xna.Framework;
 
 namespace DadSimulator.Camera
 {
@@ -7,6 +8,7 @@ namespace DadSimulator.Camera
         Matrix Transform { get; }
 
         void UpdatePosition();
+        void Follow(IPosition target);
 
         Vector2 GetCameraTopLeftPosition();
     }

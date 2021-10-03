@@ -8,9 +8,9 @@ namespace DadSimulator.Camera
     {
         public Matrix Transform { get; private set; }
         private readonly Size m_screenSize;
-        private readonly IPosition m_target;
+        private IPosition m_target;
 
-        public Camera(Size screenSize, IPosition target)
+        public Camera(Size screenSize, IPosition target=null)
         {
             m_screenSize = screenSize;
             m_target = target;
@@ -35,6 +35,11 @@ namespace DadSimulator.Camera
             var targetPosition = m_target.GetPosition();
             var transformationToTopLeft = new Vector2(m_screenSize.Width / 2, m_screenSize.Height / 2);
             return targetPosition - transformationToTopLeft;
+        }
+
+        public void Follow(IPosition target)
+        {
+            m_target = target;
         }
     }
 }
