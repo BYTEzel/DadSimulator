@@ -12,15 +12,13 @@ namespace DadSimulator.GraphicObjects
         private const float m_speed = 100f;
         private const float m_interactionRadius = 20f;
         public Vector2 Position { get; private set; }
-        private readonly IUserCommand m_movement;
         
         private readonly Texture2D m_texture;
 
         private readonly ICollider m_collider;
-
+        private readonly IUserCommand m_movement;
         private readonly ICollisionChecker m_collisionChecker;
         private readonly IInteractableCollection m_interactableCollection;
-
         private readonly IUiEngine m_ui;
 
         private readonly char m_actionKey;
@@ -33,7 +31,7 @@ namespace DadSimulator.GraphicObjects
             public string TextBox;
         }
 
-        private List<UiRectInteractable> m_uiRectsToDraw;
+        private readonly List<UiRectInteractable> m_uiRectsToDraw;
 
 
         public Player(Texture2D texture2D, Vector2 startPosition, 
@@ -59,12 +57,12 @@ namespace DadSimulator.GraphicObjects
         {
             m_uiRectsToDraw.Clear();
 
-            var movements = m_movement.GetDirections();
-            if (movements.Count > 0)
-            {
-                HandleCollisions(elapsedTime, movements);
-            }
+            MovePlayer(elapsedTime);
+            InteractWithObjects();
+        }
 
+        private void InteractWithObjects()
+        {
             if (m_interactableCollection != null)
             {
                 var allInteractable = m_interactableCollection.GetInteractables();
@@ -73,27 +71,49 @@ namespace DadSimulator.GraphicObjects
                     var interactablePosition = interactable.GetLocation();
                     if (m_interactionRadius >= Vector2.Distance(Position, interactablePosition))
                     {
-                        var name = interactable.GetName();
-                        var text = $"State: {interactable.GetState()}";
-                        var command = interactable.GetCommand();
-                        if (!string.IsNullOrEmpty(command))
-                        {
-                            text += $"\n[{m_actionKey}] to {command}";
-                        }
-                        m_uiRectsToDraw.Add(new UiRectInteractable()
-                        {
-                            XPosition = (int)interactablePosition.X,
-                            RectColor = Color.Black,
-                            TextHeadline = name,
-                            TextBox = text
-                        });
-
-                        if (m_movement.IsActionKeyPressed())
-                        {
-                            interactable.ExecuteCommand();
-                        }
+                        HandleInteraction(interactable, interactablePosition);
                     }
                 }
+            }
+        }
+
+        private void HandleInteraction(IInteractable interactable, Vector2 interactablePosition)
+        {
+            var text = AssembleInteractableText(interactable);
+
+            m_uiRectsToDraw.Add(new UiRectInteractable()
+            {
+                XPosition = (int)interactablePosition.X,
+                RectColor = Color.Black,
+                TextHeadline = interactable.GetName(),
+                TextBox = text
+            });
+
+            if (m_movement.IsActionKeyPressed())
+            {
+                interactable.ExecuteCommand();
+            }
+        }
+
+        private string AssembleInteractableText(IInteractable interactable)
+        {
+            var text = $"State: {interactable.GetState()}";
+            var command = interactable.GetCommand();
+
+            if (!string.IsNullOrEmpty(command))
+            {
+                text += $"\n[{m_actionKey}] to {command}";
+            }
+
+            return text;
+        }
+
+        private void MovePlayer(double elapsedTime)
+        {
+            var movements = m_movement.GetDirections();
+            if (movements.Count > 0)
+            {
+                HandleCollisions(elapsedTime, movements);
             }
         }
 
@@ -174,7 +194,12 @@ namespace DadSimulator.GraphicObjects
 
         public void Draw(SpriteBatch batch)
         {
-            batch.Draw(m_texture, Position, null, Color.Red);
+            DrawPlayer(batch);
+            DrawInteractionUI();
+        }
+
+        private void DrawInteractionUI()
+        {
             foreach (var boxParams in m_uiRectsToDraw)
             {
                 m_ui.DrawRectangleInteractable(
@@ -184,8 +209,11 @@ namespace DadSimulator.GraphicObjects
                     boxParams.TextBox
                     );
             }
-
         }
 
+        private void DrawPlayer(SpriteBatch batch)
+        {
+            batch.Draw(m_texture, Position, null, Color.Red);
+        }
     }
 }
