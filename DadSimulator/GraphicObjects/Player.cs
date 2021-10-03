@@ -1,5 +1,6 @@
 ﻿using DadSimulator.Collider;
 using DadSimulator.Interactable;
+using DadSimulator.Misc;
 using DadSimulator.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -7,7 +8,7 @@ using System.Collections.Generic;
 
 namespace DadSimulator.GraphicObjects
 {
-    public class Player : IGraphicObject
+    public class Player : IGraphicObject, IPosition
     {
         private const float m_speed = 100f;
         private const float m_interactionRadius = 20f;
@@ -68,7 +69,7 @@ namespace DadSimulator.GraphicObjects
                 var allInteractable = m_interactableCollection.GetInteractables();
                 foreach (var interactable in allInteractable)
                 {
-                    var interactablePosition = interactable.GetLocation();
+                    var interactablePosition = interactable.GetPosition();
                     if (m_interactionRadius >= Vector2.Distance(Position, interactablePosition))
                     {
                         HandleInteraction(interactable, interactablePosition);
@@ -214,6 +215,11 @@ namespace DadSimulator.GraphicObjects
         private void DrawPlayer(SpriteBatch batch)
         {
             batch.Draw(m_texture, Position, null, Color.Red);
+        }
+
+        public Vector2 GetPosition()
+        {
+            return Position;
         }
     }
 }

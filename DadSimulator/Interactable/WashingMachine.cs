@@ -65,7 +65,7 @@ namespace DadSimulator.Interactable
         }
 
 
-        public Vector2 GetLocation()
+        public Vector2 GetPosition()
         {
             return m_interactionPosition;
         }

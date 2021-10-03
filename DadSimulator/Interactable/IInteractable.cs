@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using System.Collections.Generic;
+﻿using DadSimulator.Misc;
 
 namespace DadSimulator.Interactable
 {
@@ -9,7 +8,7 @@ namespace DadSimulator.Interactable
         public string Description;
     }
 
-    public interface IInteractable
+    public interface IInteractable : IPosition
     {
         /// <summary>
         /// Get the name of the object.
@@ -30,11 +29,5 @@ namespace DadSimulator.Interactable
         /// Command of GetCommand() is executed.
         /// </summary>
         void ExecuteCommand();
-        /// <summary>
-        /// Get the location of the object. This can be used for the player to check,
-        /// if the object is in reach to be interacted with.
-        /// </summary>
-        /// <returns>Location of the interaction object.</returns>
-        Vector2 GetLocation();
     }
 }

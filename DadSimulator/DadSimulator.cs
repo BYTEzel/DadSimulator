@@ -1,4 +1,5 @@
-﻿using DadSimulator.Collider;
+﻿using DadSimulator.Camera;
+using DadSimulator.Collider;
 using DadSimulator.GraphicObjects;
 using DadSimulator.Interactable;
 using DadSimulator.IO;
@@ -20,9 +21,12 @@ namespace DadSimulator
         private SpriteFont m_font;
         private IUiEngine m_uiEngine;
         private readonly Timer m_gameTimer;
+        private ICamera m_camera;
+        private readonly Size m_screenSize;
 
         public DadSimulator()
         {
+            m_screenSize = new Size() { Width = 1920, Height = 1200 };
             InitGraphics();
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
@@ -35,8 +39,8 @@ namespace DadSimulator
         {
             m_graphics = new GraphicsDeviceManager(this);
             //m_graphics.IsFullScreen = true;
-            m_graphics.PreferredBackBufferWidth = 1920;
-            m_graphics.PreferredBackBufferHeight = 1280;
+            m_graphics.PreferredBackBufferWidth = (int)m_screenSize.Width;
+            m_graphics.PreferredBackBufferHeight = (int)m_screenSize.Height;
             m_graphics.ApplyChanges();
 
             m_font = Content.Load<SpriteFont>("Content/Fonts/8-bit Operator+");
@@ -68,6 +72,9 @@ namespace DadSimulator
 
 
             m_interactables.Add(washMaschine);
+
+            m_camera = new Camera.Camera(m_screenSize, player);
+
             // TODO: use this.Content to load your game content here
         }
 
@@ -83,6 +90,7 @@ namespace DadSimulator
                 gameObj.Update(gameSeconds);
             }
             m_gameTimer.Update(gameTime);
+            m_camera.UpdatePosition();
             // TODO: Add your update logic here
             base.Update(gameTime);
         }
@@ -92,7 +100,7 @@ namespace DadSimulator
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            m_spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+            m_spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: m_camera.Transform);
             foreach (var gameObj in m_gameObjects)
             {
                 gameObj.Draw(m_spriteBatch);
