@@ -1,11 +1,9 @@
 ﻿using Microsoft.Xna.Framework.Input;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace DadSimulator.GraphicObjects
 {
-    class KeyboardMovement : IMovementCommand
+    class KeyboardUserCommand : IUserCommand
     {
         private const Keys m_actionKey = Keys.E;
 
@@ -19,22 +17,22 @@ namespace DadSimulator.GraphicObjects
             var commandList = new List<Directions>();
             var kstate = Keyboard.GetState();
 
-            if (kstate.IsKeyDown(Keys.Up))
+            if (kstate.IsKeyDown(Keys.Up) || kstate.IsKeyDown(Keys.W))
             {
                 commandList.Add(Directions.Up);
             }
 
-            if (kstate.IsKeyDown(Keys.Down))
+            if (kstate.IsKeyDown(Keys.Down) || kstate.IsKeyDown(Keys.S))
             {
                 commandList.Add(Directions.Down);
             }
 
-            if (kstate.IsKeyDown(Keys.Left))
+            if (kstate.IsKeyDown(Keys.Left) || kstate.IsKeyDown(Keys.A))
             {
                 commandList.Add(Directions.Left);
             }
 
-            if (kstate.IsKeyDown(Keys.Right))
+            if (kstate.IsKeyDown(Keys.Right) || kstate.IsKeyDown(Keys.D))
             {
                 commandList.Add(Directions.Right);
             }

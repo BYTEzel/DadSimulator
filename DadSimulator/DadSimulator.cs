@@ -57,7 +57,7 @@ namespace DadSimulator
             var levelBounds = new LevelBounds(this, Templates.LevelWalls, new Vector2(0, 0), collisionMap);
                 
             var player = new Player(LoadTemplate(Templates.Character), new Vector2(200, 200), 
-                new KeyboardMovement(), collisionMap, this, m_uiEngine); 
+                new KeyboardUserCommand(), collisionMap, this, m_uiEngine); 
                 
             var washMaschine = new WashingMachine(LoadTemplate(Templates.Test), 
                 new Vector2(200, 50), new Vector2(201, 51));

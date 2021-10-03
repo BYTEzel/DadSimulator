@@ -1,17 +1,14 @@
-﻿using Microsoft.Xna.Framework;
+﻿using DadSimulator.Misc;
+using Microsoft.Xna.Framework;
 using System;
 
 namespace DadSimulator.Collider
 {
-    public struct Size
-    {
-        public uint Width;
-        public uint Height;
-    }
+    
 
     public class CollidableMap : ICollisionChecker
     {
-        private Color[,] m_map;
+        private readonly Color[,] m_map;
         private const byte m_border = 255;
         private const byte m_noBorder = 0;
 

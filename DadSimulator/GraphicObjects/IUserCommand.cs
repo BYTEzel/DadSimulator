@@ -4,7 +4,7 @@ namespace DadSimulator.GraphicObjects
 {
     public enum Directions { Up, Right, Down, Left}
     
-    public interface IMovementCommand
+    public interface IUserCommand
     {
         List<Directions> GetDirections();
         bool IsActionKeyPressed();

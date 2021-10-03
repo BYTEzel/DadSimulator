@@ -1,6 +1,7 @@
 ﻿using DadSimulator.Collider;
 using NUnit.Framework;
 using Microsoft.Xna.Framework;
+using DadSimulator.Misc;
 
 namespace DadSimulator.Tests
 {

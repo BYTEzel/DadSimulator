@@ -12,7 +12,7 @@ namespace DadSimulator.GraphicObjects
         private const float m_speed = 100f;
         private const float m_interactionRadius = 20f;
         public Vector2 Position { get; private set; }
-        private readonly IMovementCommand m_movement;
+        private readonly IUserCommand m_movement;
         
         private readonly Texture2D m_texture;
 
@@ -37,7 +37,7 @@ namespace DadSimulator.GraphicObjects
 
 
         public Player(Texture2D texture2D, Vector2 startPosition, 
-            IMovementCommand movement, ICollisionChecker collisionChecker, 
+            IUserCommand movement, ICollisionChecker collisionChecker, 
             IInteractableCollection interactableCollection, IUiEngine gui)
         {
             m_texture = texture2D;
