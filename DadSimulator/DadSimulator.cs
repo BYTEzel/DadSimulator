@@ -26,7 +26,7 @@ namespace DadSimulator
 
         public DadSimulator()
         {
-            m_screenSize = new Size() { Width = 1920, Height = 1200 };
+            m_screenSize = new Size() { Width = 640, Height = 480};
             InitGraphics();
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
@@ -106,7 +106,7 @@ namespace DadSimulator
                 gameObj.Draw(m_spriteBatch);
             }
 
-            m_uiEngine.DrawText(Vector2.One, Color.White, m_gameTimer.GetGameDateAndTime(), true);
+            m_uiEngine.DrawText(m_camera.GetCameraTopLeftPosition(), Color.White, m_gameTimer.GetGameDateAndTime(), true);
 
             m_spriteBatch.End();
 

@@ -7,5 +7,7 @@ namespace DadSimulator.Camera
         Matrix Transform { get; }
 
         void UpdatePosition();
+
+        Vector2 GetCameraTopLeftPosition();
     }
 }

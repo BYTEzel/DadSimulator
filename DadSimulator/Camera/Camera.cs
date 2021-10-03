@@ -1,4 +1,5 @@
 ﻿using DadSimulator.Misc;
+using DadSimulator.UI;
 using Microsoft.Xna.Framework;
 
 namespace DadSimulator.Camera
@@ -27,6 +28,13 @@ namespace DadSimulator.Camera
                 m_screenSize.Height / 2,
                 0);
             Transform = position * offset;
+        }
+
+        public Vector2 GetCameraTopLeftPosition()
+        {
+            var targetPosition = m_target.GetPosition();
+            var transformationToTopLeft = new Vector2(m_screenSize.Width / 2, m_screenSize.Height / 2);
+            return targetPosition - transformationToTopLeft;
         }
     }
 }
