@@ -52,7 +52,7 @@ namespace DadSimulator.Tests
         {
             var startPosition = Microsoft.Xna.Framework.Vector2.Zero;
 
-            var objTopLeft = new Player(m_texture, startPosition, null, null, null, null);
+            var objTopLeft = new Player(m_texture, startPosition, new MovementInput(), null, null, null);
             Assert.AreEqual(0, objTopLeft.Position.X);
             Assert.AreEqual(0, objTopLeft.Position.Y);
         }
