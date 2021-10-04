@@ -55,7 +55,6 @@ namespace DadSimulator.UI
 
             Rectangle rectangle = ComputeRectangle(padding, textSizeHeadline, textSizeInBox, positionTopLeft);
 
-            DrawLine(new Vector2(rectangle.Center.X, rectangle.Center.Y), positionInteractable, 5.0f, color);
             DrawRectangle(rectangle, color);
             DrawText(new Vector2(positionTopLeft.X + padding, positionTopLeft.Y + padding), Color.White, headline, true, scalingHeadline);
             DrawText(new Vector2(positionTopLeft.X + padding, positionTopLeft.Y + textSizeHeadline.Y + padding), Color.White, textInBox, false, scalingText);

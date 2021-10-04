@@ -60,7 +60,7 @@ namespace DadSimulator
 
         protected override void LoadContent()
         {
-            m_camera = new Camera.Camera(m_screenSize);
+            m_camera = new Camera.Camera(m_screenSize, 2);
             m_uiEngine = new UiEngine(GraphicsDevice, m_spriteBatch, m_font, m_font, m_camera);
 
             var collisionMap = new CollidableMap(new Size() { Width = 640, Height = 480 });

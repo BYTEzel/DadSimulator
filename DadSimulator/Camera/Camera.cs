@@ -8,11 +8,13 @@ namespace DadSimulator.Camera
         public Matrix Transform { get; private set; }
         private readonly Size m_screenSize;
         private IPosition m_target;
+        private float m_zoom;
 
-        public Camera(Size screenSize, IPosition target=null)
+        public Camera(Size screenSize, float zoom, IPosition target=null)
         {
             m_screenSize = screenSize;
             m_target = target;
+            m_zoom = zoom;
         }
 
         public void UpdatePosition()
@@ -22,17 +24,18 @@ namespace DadSimulator.Camera
               -targetPosition.X,
               -targetPosition.Y,
               0);
+            var zoom = Matrix.CreateScale(m_zoom);
             var offset = Matrix.CreateTranslation(
                 m_screenSize.Width / 2,
                 m_screenSize.Height / 2,
                 0);
-            Transform = position * offset;
+            Transform = position * zoom * offset;
         }
 
         public Vector2 GetCameraTopLeftPosition()
         {
             var targetPosition = m_target.GetPosition();
-            var transformationToTopLeft = new Vector2(m_screenSize.Width / 2, m_screenSize.Height / 2);
+            var transformationToTopLeft = new Vector2(m_screenSize.Width / 2, m_screenSize.Height / 2) / m_zoom;
             return targetPosition - transformationToTopLeft;
         }
 
