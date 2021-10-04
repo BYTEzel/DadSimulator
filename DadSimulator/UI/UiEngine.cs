@@ -26,12 +26,21 @@ namespace DadSimulator.UI
             m_rectBase.Dispose();
         }
 
+        public void DrawLine(Vector2 point1, Vector2 point2, float thickness, Color color)
+        {
+            var distance = Vector2.Distance(point1, point2);
+            var angle = (float)System.Math.Atan2(point2.Y - point1.Y, point2.X - point1.X);
+            var origin = new Vector2(0f, 0.5f);
+            var scale = new Vector2(distance, thickness);
+            m_spriteBatch.Draw(m_rectBase, point1, null, color, angle, origin, scale, SpriteEffects.None, 0);
+        }
+
         public void DrawRectangle(Rectangle rect, Color color)
         {
             m_spriteBatch.Draw(m_rectBase, rect, color);
         }
 
-        public void DrawRectangleInteractable(int xPosition, Color color, string headline, string textInBox)
+        public void DrawRectangleInteractable(Vector2 positionInteractable, RelativePosition relativePosition, Color color, string headline, string textInBox)
         {
             const float scalingHeadline = 0.7f;
             const float scalingText = 0.5f;
@@ -40,11 +49,20 @@ namespace DadSimulator.UI
             var textSizeInBox = m_fontText.MeasureString(textInBox) * scalingText;
             int padding = 10;
 
-            var center = m_camera.GetScreenCenter();
+            const int shift = 50;
+            float posY;
+            if (relativePosition == RelativePosition.Top)
+            {
+                posY = positionInteractable.Y - (shift + 2 * padding + textSizeHeadline.Y + textSizeInBox.Y);
+            }
+            else
+            {
+                posY = positionInteractable.Y + shift;
+            }
 
             var positionTopLeft = new Point(
-                x: (int)(center.X-padding-(System.Math.Max(textSizeHeadline.X, textSizeInBox.X)/2)), 
-                y: (int)m_camera.GetCameraTopLeftPosition().Y + 50);
+                x: (int)(positionInteractable.X-padding-(System.Math.Max(textSizeHeadline.X, textSizeInBox.X)/2)), 
+                y: (int)(posY));
 
             var rectangle = new Rectangle(
                 positionTopLeft,
@@ -52,6 +70,7 @@ namespace DadSimulator.UI
                     x: (int)System.Math.Max(textSizeHeadline.X, textSizeInBox.X) + padding * 2,
                     y: (int)(textSizeHeadline.Y + textSizeInBox.Y) + (padding * 2)));
 
+            DrawLine(new Vector2(rectangle.Center.X, rectangle.Center.Y), positionInteractable, 5.0f, color);
             DrawRectangle(rectangle, color);
             DrawText(new Vector2(positionTopLeft.X + padding, positionTopLeft.Y + padding), Color.White, headline, true, scalingHeadline);
             DrawText(new Vector2(positionTopLeft.X + padding, positionTopLeft.Y + textSizeHeadline.Y + padding), Color.White, textInBox, false, scalingText);

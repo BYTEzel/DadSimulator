@@ -26,7 +26,8 @@ namespace DadSimulator.GraphicObjects
 
         internal struct UiRectInteractable
         {
-            public int XPosition;
+            public Vector2 PositionInteractable;
+            public RelativePosition RelativePosistion;
             public Color RectColor;
             public string TextHeadline;
             public string TextBox;
@@ -82,9 +83,12 @@ namespace DadSimulator.GraphicObjects
         {
             var text = AssembleInteractableText(interactable);
 
+            var relativePos = Position.Y > interactablePosition.Y ? RelativePosition.Top : RelativePosition.Bottom;
+
             m_uiRectsToDraw.Add(new UiRectInteractable()
             {
-                XPosition = (int)interactablePosition.X,
+                PositionInteractable = interactablePosition,
+                RelativePosistion = relativePos,
                 RectColor = Color.Black,
                 TextHeadline = interactable.GetName(),
                 TextBox = text
@@ -204,7 +208,8 @@ namespace DadSimulator.GraphicObjects
             foreach (var boxParams in m_uiRectsToDraw)
             {
                 m_ui.DrawRectangleInteractable(
-                    boxParams.XPosition,
+                    boxParams.PositionInteractable,
+                    boxParams.RelativePosistion,
                     boxParams.RectColor,
                     boxParams.TextHeadline,
                     boxParams.TextBox
