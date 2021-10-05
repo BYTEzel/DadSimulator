@@ -1,6 +1,9 @@
 using DadSimulator.Collider;
 using DadSimulator.GraphicObjects;
+using DadSimulator.Interactable;
 using DadSimulator.IO;
+using DadSimulator.UI;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -10,6 +13,13 @@ namespace DadSimulator.Tests
     class MovementInput : IUserCommand
     {
         public List<Directions> CurrentDirections;
+        private bool m_actionKeyPressed;
+
+        public MovementInput()
+        {
+            m_actionKeyPressed = false;
+            CurrentDirections = new List<Directions>();
+        }
 
         public char GetActionKey()
         {
@@ -23,7 +33,104 @@ namespace DadSimulator.Tests
 
         public bool IsActionKeyPressed()
         {
-            return false;
+            return m_actionKeyPressed;
+        }
+
+        public void SetActionKey(bool isPressed)
+        {
+            m_actionKeyPressed = isPressed;
+        }
+    }
+
+    class InteractableTest : IInteractable
+    {
+        public bool IsCommandExecuted { get; private set; }
+        public bool IsStateNameCommandCalled { get; private set; }
+
+        private Vector2 m_position;
+
+        public InteractableTest(Vector2 position)
+        {
+            m_position = position;
+            IsStateNameCommandCalled = false;
+            IsCommandExecuted = false;
+        }
+
+        public void ExecuteCommand()
+        {
+            IsCommandExecuted = true;
+        }
+
+        public string GetCommand()
+        {
+            IsStateNameCommandCalled = true;
+            return "Test Command";
+        }
+
+        public string GetName()
+        {
+            IsStateNameCommandCalled = true;
+            return "Test Interactable";
+        }
+
+        public Vector2 GetPosition()
+        {
+            return m_position;
+        }
+
+        public string GetState()
+        {
+            IsStateNameCommandCalled = true;
+            return "Test State";
+        }
+    }
+
+    class UiTest : IUiEngine
+    {
+        public bool DrawLineCalled { get; private set; }
+        public bool DrawRectangleCalled { get; private set; }
+        public bool DrawRectangleInteractableCalled { get; private set; }
+
+        public UiTest()
+        {
+            DrawLineCalled = false;
+            DrawRectangleCalled = false;
+            DrawRectangleInteractableCalled = false;
+        }
+
+        public void DrawLine(Vector2 point1, Vector2 point2, float thickness, Color color)
+        {
+
+            DrawLineCalled = true;
+        }
+
+        public void DrawRectangle(Rectangle rect, Color color)
+        {
+            DrawRectangleCalled = true;
+        }
+
+        public void DrawRectangleInteractable(Vector2 positionInteractable, RelativePosition relativePosition, Color color, string headline, string textInBox)
+        {
+            DrawRectangleInteractableCalled = true;
+        }
+
+        public void DrawText(Vector2 positionTopLeft, Color color, string text, bool isHeadline, float scaling = 1)
+        {
+        }
+    }
+
+    class InteractableList : IInteractableCollection
+    {
+        public List<IInteractable> Interactables;
+
+        public InteractableList()
+        {
+            Interactables = new List<IInteractable>();
+        }
+
+        public List<IInteractable> GetInteractables()
+        {
+            return Interactables;
         }
     }
 
@@ -50,7 +157,7 @@ namespace DadSimulator.Tests
         [Test]
         public void StartPosition()
         {
-            var startPosition = Microsoft.Xna.Framework.Vector2.Zero;
+            var startPosition = Vector2.Zero;
 
             var objTopLeft = new Player(m_texture, startPosition, new MovementInput(), null, null, null);
             Assert.AreEqual(0, objTopLeft.Position.X);
@@ -61,7 +168,7 @@ namespace DadSimulator.Tests
         public void Move()
         {
             var movement = new MovementInput();
-            var obj = new Player(m_texture, Microsoft.Xna.Framework.Vector2.Zero, movement, null, null, null);
+            var obj = new Player(m_texture, Vector2.Zero, movement, null, null, null);
 
             UpdateDirection(ref obj, movement, new List<Directions> { Directions.Up });
             Assert.AreEqual(0, obj.Position.X);
@@ -83,6 +190,49 @@ namespace DadSimulator.Tests
             Assert.AreEqual(0, obj.Position.X);
             Assert.AreEqual(0, obj.Position.Y);
 
+        }
+
+        [Test]
+        public void Interactable()
+        {
+            var startPositionPlayer = Vector2.Zero;
+            var interactionPosition = new Vector2(100, 0);
+
+            var movement = new MovementInput();
+            var collisionChecker = new CollidableMap(new Misc.Size() { Width=10, Height=10 });
+            var interactable = new InteractableTest(interactionPosition);
+            var interactableCollection = new InteractableList();
+            interactableCollection.Interactables.Add(interactable); 
+            var ui = new UiTest();
+
+            var player = new Player(m_texture, startPositionPlayer, movement, collisionChecker, interactableCollection, ui);
+
+            // If no action button is pressed, nothing should happen
+            player.Update(0);
+            Assert.IsFalse(interactable.IsCommandExecuted);
+            Assert.IsFalse(interactable.IsStateNameCommandCalled);
+            Assert.AreEqual(player.Position, startPositionPlayer);
+
+            movement.CurrentDirections.Add(Directions.Right);
+            for (int i = 1; i < (int)interactionPosition.X; i++)
+            {
+                player.Update(i);
+                if (interactable.IsStateNameCommandCalled)
+                {
+                    // Break when the position is close enough to interact with the object
+                    break;
+                }
+            }
+            
+            // When the object is close, information should be requested
+            Assert.IsTrue(interactable.IsStateNameCommandCalled);
+            Assert.IsFalse(interactable.IsCommandExecuted); // No action key is pressed -> no command is executed
+
+            // When an action key is pressed, the interaction should take place
+            movement.CurrentDirections = new List<Directions>();
+            movement.SetActionKey(true);
+            player.Update(interactionPosition.X);
+            Assert.IsTrue(interactable.IsCommandExecuted);
         }
 
         void UpdateDirection(ref Player obj, MovementInput movement, List<Directions> directions)
