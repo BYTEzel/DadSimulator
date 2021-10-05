@@ -10,17 +10,16 @@ namespace DadSimulator.GraphicObjects
 {
     public class Player : IGraphicObject, IPosition
     {
-        private const float m_speed = 100f;
+        public Vector2 Position { get => m_movement.Position; }
         private const float m_interactionRadius = 20f;
-        public Vector2 Position { get; private set; }
         
         private readonly Texture2D m_texture;
 
-        private readonly ICollider m_collider;
-        private readonly IUserCommand m_movement;
-        private readonly ICollisionChecker m_collisionChecker;
         private readonly IInteractableCollection m_interactableCollection;
         private readonly IUiEngine m_ui;
+        private readonly IUserCommand m_userCommand;
+
+        private readonly PlayerMovement m_movement;
 
         private readonly char m_actionKey;
 
@@ -41,14 +40,12 @@ namespace DadSimulator.GraphicObjects
             IInteractableCollection interactableCollection, IUiEngine gui)
         {
             m_texture = texture2D;
-            Position = startPosition;
-            m_movement = movement;
-            m_collisionChecker = collisionChecker;
+            m_userCommand = movement;
+            m_movement = new PlayerMovement(startPosition, movement, new RectangleCollider(texture2D), collisionChecker);
             m_interactableCollection = interactableCollection;
-            m_collider = new RectangleCollider(texture2D);
             m_ui = gui;
             m_uiRectsToDraw = new List<UiRectInteractable>();
-            m_actionKey = m_movement.GetActionKey();
+            m_actionKey = movement.GetActionKey();
         }
 
         public void Initialize()
@@ -59,7 +56,7 @@ namespace DadSimulator.GraphicObjects
         {
             m_uiRectsToDraw.Clear();
 
-            MovePlayer(elapsedTime);
+            m_movement.MovePlayer(elapsedTime);
             InteractWithObjects();
         }
 
@@ -94,7 +91,7 @@ namespace DadSimulator.GraphicObjects
                 TextBox = text
             });
 
-            if (m_movement.IsActionKeyPressed())
+            if (m_userCommand.IsActionKeyPressed())
             {
                 interactable.ExecuteCommand();
             }
@@ -112,90 +109,7 @@ namespace DadSimulator.GraphicObjects
 
             return text;
         }
-
-        private void MovePlayer(double elapsedTime)
-        {
-            var movements = m_movement.GetDirections();
-            if (movements.Count > 0)
-            {
-                HandleCollisions(elapsedTime, movements);
-            }
-        }
-
-        private void HandleCollisions(double elapsedTime, List<Directions> movements)
-        {
-            foreach (var mov in movements)
-            {
-                var deltaMovement = ComputeEstimatedShift(elapsedTime, mov);
-                deltaMovement = CheckCollisionsWithEstimatedShiftAndCorrect(deltaMovement, mov);
-                Position += deltaMovement;
-            }
-        }
-
-        private Vector2 CheckCollisionsWithEstimatedShiftAndCorrect(Vector2 deltaMovement, Directions mov)
-        {
-            var correctedDelta = deltaMovement;
-
-            if (m_collisionChecker != null)
-            {
-                var newPosition = Position + correctedDelta;
-
-                var apc = new AlignedPointCloud()
-                {
-                    PointCloud = new PointCloud() { PointsInOrigin = m_collider.GetPointCloud().PointsInOrigin },
-                    Shift = newPosition
-                };
-
-                if (m_collisionChecker.IsColliding(apc))
-                {
-                    correctedDelta = CorrectEstimatedShift(correctedDelta, mov);
-                }
-            }
-            return correctedDelta;
-        }
-
-        private static Vector2 CorrectEstimatedShift(Vector2 deltaMovement, Directions mov)
-        {
-            switch (mov)
-            {
-                case Directions.Up:
-                case Directions.Down:
-                    deltaMovement.Y = 0;
-                    break;
-                case Directions.Right:
-                case Directions.Left:
-                    deltaMovement.X = 0;
-                    break;
-                default:
-                    break;
-            }
-
-            return deltaMovement;
-        }
-
-        private Vector2 ComputeEstimatedShift(double elapsedTime, Directions mov)
-        {
-            var delta = Vector2.Zero;
-            switch (mov)
-            {
-                case Directions.Up:
-                    delta.Y = - m_speed * (float)elapsedTime;
-                    break;
-                case Directions.Right:
-                    delta.X = m_speed * (float)elapsedTime;
-                    break;
-                case Directions.Down:
-                    delta.Y = m_speed * (float)elapsedTime;
-                    break;
-                case Directions.Left:
-                    delta.X = - m_speed * (float)elapsedTime;
-                    break;
-                default:
-                    break;
-            }
-
-            return delta;
-        }
+        
 
         public void Draw(SpriteBatch batch)
         {
