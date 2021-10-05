@@ -10,11 +10,9 @@ namespace DadSimulator.GraphicObjects
         public float Speed;
         public Vector2 Position { get; private set; }
 
-
         private readonly IUserCommand m_movement;
         private readonly ICollider m_collider;
         private readonly ICollisionChecker m_collisionChecker;
-
 
         public PlayerMovement(Vector2 startPos, IUserCommand movement, ICollider collider, ICollisionChecker checker)
         {
