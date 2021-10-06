@@ -64,7 +64,7 @@ namespace DadSimulator
             m_uiEngine = new UiEngine(GraphicsDevice, m_spriteBatch, m_font, m_font, m_camera);
 
             var collisionMap = new CollidableMap(new Size() { Width = 640, Height = 480 });
-
+            var levelBackgroundGrass = new LevelBackground(LoadTemplate(Templates.LevelGrassBackground), new Vector2(-500, -500));
             var levelBounds = new LevelBounds(this, Templates.LevelWalls, new Vector2(0, 0), collisionMap);
                 
             var player = new Player(LoadTemplate(Templates.Character), new Vector2(200, 200), 
@@ -73,7 +73,7 @@ namespace DadSimulator
             var washMaschine = new WashingMachine(LoadTemplate(Templates.Test), 
                 new Vector2(200, 50), new Vector2(201, 51));
 
-
+            m_gameObjects.Add(levelBackgroundGrass);
             m_gameObjects.Add(levelBounds);
             m_gameObjects.Add(washMaschine);
             m_gameObjects.Add(player);
@@ -142,6 +142,9 @@ namespace DadSimulator
                     break;
                 case Templates.LevelWalls:
                     stringName = "level-bounds";
+                    break;
+                case Templates.LevelGrassBackground:
+                    stringName = "Backgrounds/level-background";
                     break;
                 default:
                     break;

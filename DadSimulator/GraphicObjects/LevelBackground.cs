@@ -6,16 +6,14 @@ namespace DadSimulator.GraphicObjects
     public class LevelBackground : IGraphicObject
     {
         protected Texture2D m_texture;
-        protected string m_name;
 
         /// <summary>
         /// Get the world position of the texture.
         /// </summary>
         public Vector2 Position;
 
-        public LevelBackground(string name, Texture2D texture2D, Vector2 position)
+        public LevelBackground(Texture2D texture2D, Vector2 position)
         {
-            m_name = name;
             m_texture = texture2D;
             Position = position;
         }
@@ -32,11 +30,6 @@ namespace DadSimulator.GraphicObjects
         public void Update(double elapsedTime)
         {
             
-        }
-
-        public string GetName()
-        {
-            return m_name;
         }
     }
 }
