@@ -28,6 +28,7 @@ namespace DadSimulator.GraphicObjects
             public Vector2 PositionInteractable;
             public RelativePosition RelativePosistion;
             public Color RectColor;
+            public Color BorderColor;
             public string TextHeadline;
             public string TextBox;
         }
@@ -86,9 +87,10 @@ namespace DadSimulator.GraphicObjects
             {
                 PositionInteractable = interactablePosition,
                 RelativePosistion = relativePos,
-                RectColor = new Color(0, 0, 0, 128),
                 TextHeadline = interactable.GetName(),
-                TextBox = text
+                TextBox = text,
+                RectColor = new Color(0, 0, 0, 128),
+                BorderColor = Color.White
             });
 
             if (m_userCommand.IsActionKeyPressed())
@@ -124,9 +126,10 @@ namespace DadSimulator.GraphicObjects
                 m_ui.DrawRectangleInteractable(
                     boxParams.PositionInteractable,
                     boxParams.RelativePosistion,
-                    boxParams.RectColor,
                     boxParams.TextHeadline,
-                    boxParams.TextBox
+                    boxParams.TextBox,
+                    boxParams.RectColor,
+                    boxParams.BorderColor
                     );
             }
         }

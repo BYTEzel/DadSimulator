@@ -20,7 +20,7 @@ namespace DadSimulator.Misc
 
         public TimeSpan GetGameTime()
         {
-            return TimeSpan.FromSeconds(m_gameTimeInSeconds * 6000);
+            return TimeSpan.FromSeconds(m_gameTimeInSeconds * 60);
         }
 
         public string GetGameDateAndTime()

@@ -40,12 +40,11 @@ namespace DadSimulator.UI
             m_spriteBatch.Draw(m_rectBase, rect, color);
         }
 
-        public void DrawRectangleInteractable(Vector2 positionInteractable, RelativePosition relativePosition, Color color, string headline, string textInBox)
+        public void DrawRectangleInteractable(Vector2 positionInteractable, RelativePosition relativePosition, string headline, string textInBox, Color colorBox, Color colorBorder, int borderSize = 2)
         {
             const float scalingHeadline = 0.7f;
             const float scalingText = 0.5f;
-            const int halfBorderSize = 1;
-            const int padding = 10 + halfBorderSize;
+            var padding = 10 + borderSize / 2;
             const int shift = 50;
 
             var textSizeHeadline = m_fontHeadline.MeasureString(headline) * scalingHeadline;
@@ -61,13 +60,11 @@ namespace DadSimulator.UI
             var bottomLeft = topLeft + new Vector2(0, rectangleContent.Height);
             var bottomRight = topLeft + new Vector2(rectangleContent.Width, rectangleContent.Height);
 
-            var borderSize = halfBorderSize * 2;
-            var borderColor = Color.White;
-            DrawLine(topLeft, topRight, borderSize, borderColor);
-            DrawLine(topRight, bottomRight, borderSize, borderColor);
-            DrawLine(bottomRight, bottomLeft, borderSize, borderColor);
-            DrawLine(bottomLeft, topLeft, borderSize, borderColor);
-            DrawRectangle(rectangleContent, color);
+            DrawLine(topLeft, topRight, borderSize, colorBorder);
+            DrawLine(topRight, bottomRight, borderSize, colorBorder);
+            DrawLine(bottomRight, bottomLeft, borderSize, colorBorder);
+            DrawLine(bottomLeft, topLeft, borderSize, colorBorder);
+            DrawRectangle(rectangleContent, colorBox);
             DrawText(new Vector2(positionTopLeft.X + padding, positionTopLeft.Y + padding), Color.White, headline, true, scalingHeadline);
             DrawText(new Vector2(positionTopLeft.X + padding, positionTopLeft.Y + textSizeHeadline.Y + padding), Color.White, textInBox, false, scalingText);
 
