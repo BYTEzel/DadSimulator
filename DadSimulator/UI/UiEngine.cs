@@ -9,16 +9,14 @@ namespace DadSimulator.UI
         private readonly Texture2D m_rectBase;
         private readonly SpriteFont m_fontHeadline, m_fontText;
         private readonly SpriteBatch m_spriteBatch;
-        private readonly ICamera m_camera;
 
-        public UiEngine(GraphicsDevice graphics, SpriteBatch batch, SpriteFont fontHeadline, SpriteFont fontText, ICamera camera)
+        public UiEngine(GraphicsDevice graphics, SpriteBatch batch, SpriteFont fontHeadline, SpriteFont fontText)
         {
             m_rectBase = new Texture2D(graphics, 1, 1);
             m_rectBase.SetData(new[] { Color.White });
             m_fontHeadline = fontHeadline;
             m_fontText = fontText;
             m_spriteBatch = batch;
-            m_camera = camera;
         }
 
         ~UiEngine()

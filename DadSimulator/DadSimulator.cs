@@ -61,7 +61,7 @@ namespace DadSimulator
         protected override void LoadContent()
         {
             m_camera = new Camera.Camera(m_screenSize, 2);
-            m_uiEngine = new UiEngine(GraphicsDevice, m_spriteBatch, m_font, m_font, m_camera);
+            m_uiEngine = new UiEngine(GraphicsDevice, m_spriteBatch, m_font, m_font);
 
             var collisionMap = new CollidableMap(new Size() { Width = 640, Height = 480 });
             var levelBackgroundGrass = new LevelBackgroundDayNight(LoadTemplate(Templates.LevelGrassBackground), new Vector2(-500, -500), m_gameTimer);
