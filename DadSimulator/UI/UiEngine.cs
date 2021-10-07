@@ -55,6 +55,15 @@ namespace DadSimulator.UI
 
             Rectangle rectangleContent = ComputeRectangle(padding, textSizeHeadline, textSizeInBox, positionTopLeft);
 
+            DrawRectangleBorder(colorBorder, borderSize, rectangleContent);
+            DrawRectangle(rectangleContent, colorBox);
+            DrawText(new Vector2(positionTopLeft.X + padding, positionTopLeft.Y + padding), Color.White, headline, true, scalingHeadline);
+            DrawText(new Vector2(positionTopLeft.X + padding, positionTopLeft.Y + textSizeHeadline.Y + padding), Color.White, textInBox, false, scalingText);
+
+        }
+
+        private void DrawRectangleBorder(Color colorBorder, int borderSize, Rectangle rectangleContent)
+        {
             var topLeft = new Vector2(rectangleContent.X, rectangleContent.Y);
             var topRight = topLeft + new Vector2(rectangleContent.Width, 0);
             var bottomLeft = topLeft + new Vector2(0, rectangleContent.Height);
@@ -64,10 +73,6 @@ namespace DadSimulator.UI
             DrawLine(topRight, bottomRight, borderSize, colorBorder);
             DrawLine(bottomRight, bottomLeft, borderSize, colorBorder);
             DrawLine(bottomLeft, topLeft, borderSize, colorBorder);
-            DrawRectangle(rectangleContent, colorBox);
-            DrawText(new Vector2(positionTopLeft.X + padding, positionTopLeft.Y + padding), Color.White, headline, true, scalingHeadline);
-            DrawText(new Vector2(positionTopLeft.X + padding, positionTopLeft.Y + textSizeHeadline.Y + padding), Color.White, textInBox, false, scalingText);
-
         }
 
         private static Rectangle ComputeRectangle(int padding, Vector2 textSizeHeadline, Vector2 textSizeInBox, Point positionTopLeft)
