@@ -86,7 +86,7 @@ namespace DadSimulator.GraphicObjects
             {
                 PositionInteractable = interactablePosition,
                 RelativePosistion = relativePos,
-                RectColor = Color.Black,
+                RectColor = new Color(0, 0, 0, 128),
                 TextHeadline = interactable.GetName(),
                 TextBox = text
             });

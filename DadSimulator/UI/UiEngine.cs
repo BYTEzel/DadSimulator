@@ -44,7 +44,8 @@ namespace DadSimulator.UI
         {
             const float scalingHeadline = 0.7f;
             const float scalingText = 0.5f;
-            const int padding = 10;
+            const int halfBorderSize = 1;
+            const int padding = 10 + halfBorderSize;
             const int shift = 50;
 
             var textSizeHeadline = m_fontHeadline.MeasureString(headline) * scalingHeadline;
@@ -53,11 +54,23 @@ namespace DadSimulator.UI
             Point positionTopLeft = ComputeTopLeftPosition(positionInteractable, relativePosition,
                 padding, shift, textSizeHeadline, textSizeInBox);
 
-            Rectangle rectangle = ComputeRectangle(padding, textSizeHeadline, textSizeInBox, positionTopLeft);
+            Rectangle rectangleContent = ComputeRectangle(padding, textSizeHeadline, textSizeInBox, positionTopLeft);
 
-            DrawRectangle(rectangle, color);
+            var topLeft = new Vector2(rectangleContent.X, rectangleContent.Y);
+            var topRight = topLeft + new Vector2(rectangleContent.Width, 0);
+            var bottomLeft = topLeft + new Vector2(0, rectangleContent.Height);
+            var bottomRight = topLeft + new Vector2(rectangleContent.Width, rectangleContent.Height);
+
+            var borderSize = halfBorderSize * 2;
+            var borderColor = Color.White;
+            DrawLine(topLeft, topRight, borderSize, borderColor);
+            DrawLine(topRight, bottomRight, borderSize, borderColor);
+            DrawLine(bottomRight, bottomLeft, borderSize, borderColor);
+            DrawLine(bottomLeft, topLeft, borderSize, borderColor);
+            DrawRectangle(rectangleContent, color);
             DrawText(new Vector2(positionTopLeft.X + padding, positionTopLeft.Y + padding), Color.White, headline, true, scalingHeadline);
             DrawText(new Vector2(positionTopLeft.X + padding, positionTopLeft.Y + textSizeHeadline.Y + padding), Color.White, textInBox, false, scalingText);
+
         }
 
         private static Rectangle ComputeRectangle(int padding, Vector2 textSizeHeadline, Vector2 textSizeInBox, Point positionTopLeft)
