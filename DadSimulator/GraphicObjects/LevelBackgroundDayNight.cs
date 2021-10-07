@@ -17,26 +17,33 @@ namespace DadSimulator.GraphicObjects
 
         public override void Update(double elapsedTime)
         {
+            byte intensity = ComputeIntensityDependingOnDaytime();
+            m_drawColor = new Color(intensity, intensity, intensity, byte.MaxValue);
+            base.Update(elapsedTime);
+        }
+
+        private byte ComputeIntensityDependingOnDaytime()
+        {
             var sunHighest = new TimeSpan(12, 0, 0);
             var sunLowest = new TimeSpan(24, 0, 0);
-            
+
             var tmp = m_timer.GetGameTime();
             var currentTime = new TimeSpan(tmp.Hours, tmp.Minutes, tmp.Seconds);
 
-            var isSunGoingDown = currentTime.TotalSeconds > sunHighest.TotalSeconds;
 
-            var spanIntensity = byte.MaxValue - byte.MinValue;
             byte intensity;
+            var spanIntensity = byte.MaxValue - byte.MinValue;
+            var isSunGoingDown = currentTime.TotalSeconds > sunHighest.TotalSeconds;
             if (isSunGoingDown)
             {
-                intensity = (byte) (byte.MaxValue - (spanIntensity * currentTime.TotalSeconds / Math.Abs(sunLowest.TotalSeconds - sunHighest.TotalSeconds)));
+                intensity = (byte)(byte.MaxValue - (spanIntensity * currentTime.TotalSeconds / Math.Abs(sunLowest.TotalSeconds - sunHighest.TotalSeconds)));
             }
             else
             {
-                intensity = (byte) (spanIntensity * currentTime.TotalSeconds / Math.Abs(sunHighest.TotalSeconds - sunLowest.TotalSeconds));
+                intensity = (byte)(spanIntensity * currentTime.TotalSeconds / Math.Abs(sunHighest.TotalSeconds - sunLowest.TotalSeconds));
             }
-            m_drawColor = new Color(intensity, intensity, intensity, byte.MaxValue);
-            base.Update(elapsedTime);
+
+            return intensity;
         }
 
         public override void Draw(SpriteBatch batch)
