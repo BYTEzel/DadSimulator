@@ -1,11 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DadSimulator.Misc
 {
-    class Timer
+    public class Timer
     {
         private double m_gameTimeInSeconds;
         private readonly string[] m_days = { "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY" };

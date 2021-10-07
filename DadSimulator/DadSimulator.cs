@@ -64,7 +64,7 @@ namespace DadSimulator
             m_uiEngine = new UiEngine(GraphicsDevice, m_spriteBatch, m_font, m_font, m_camera);
 
             var collisionMap = new CollidableMap(new Size() { Width = 640, Height = 480 });
-            var levelBackgroundGrass = new LevelBackground(LoadTemplate(Templates.LevelGrassBackground), new Vector2(-500, -500));
+            var levelBackgroundGrass = new LevelBackgroundDayNight(LoadTemplate(Templates.LevelGrassBackground), new Vector2(-500, -500), m_gameTimer);
             var levelBounds = new LevelBounds(this, Templates.LevelWalls, new Vector2(0, 0), collisionMap);
                 
             var player = new Player(LoadTemplate(Templates.Character), new Vector2(200, 200), 

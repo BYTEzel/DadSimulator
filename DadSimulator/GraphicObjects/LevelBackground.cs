@@ -18,16 +18,16 @@ namespace DadSimulator.GraphicObjects
             Position = position;
         }
 
-        public void Draw(SpriteBatch batch)
+        public virtual void Draw(SpriteBatch batch)
         {
             batch.Draw(m_texture, Position, null, Color.White);
         }
 
-        public void Initialize()
+        public virtual void Initialize()
         {
         }
 
-        public void Update(double elapsedTime)
+        public virtual void Update(double elapsedTime)
         {
             
         }
