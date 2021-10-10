@@ -1,9 +1,11 @@
-﻿using DadSimulator.Collider;
+﻿using DadSimulator.Animation;
+using DadSimulator.Collider;
 using DadSimulator.Interactable;
 using DadSimulator.Misc;
 using DadSimulator.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 
 namespace DadSimulator.GraphicObjects
@@ -13,7 +15,7 @@ namespace DadSimulator.GraphicObjects
         public Vector2 Position { get => m_movement.Position; }
         private const float m_interactionRadius = 20f;
         
-        private readonly Texture2D m_texture;
+        private readonly ISpritesheet m_spritesheet;
 
         private readonly IInteractableCollection m_interactableCollection;
         private readonly IUiEngine m_ui;
@@ -36,17 +38,25 @@ namespace DadSimulator.GraphicObjects
         private readonly List<UiRectInteractable> m_uiRectsToDraw;
 
 
-        public Player(Texture2D texture2D, Vector2 startPosition, 
+        public Player(ISpritesheet spritesheet, ICollider collider, Vector2 startPosition, 
             IUserCommand movement, ICollisionChecker collisionChecker, 
             IInteractableCollection interactableCollection, IUiEngine gui)
         {
-            m_texture = texture2D;
+            m_spritesheet = spritesheet;
+            ConfigureSpritesheet();
             m_userCommand = movement;
-            m_movement = new PlayerMovement(startPosition, movement, new RectangleCollider(texture2D), collisionChecker);
+            m_movement = new PlayerMovement(startPosition, movement, collider, collisionChecker);
             m_interactableCollection = interactableCollection;
             m_ui = gui;
             m_uiRectsToDraw = new List<UiRectInteractable>();
             m_actionKey = movement.GetActionKey();
+        }
+
+        private void ConfigureSpritesheet()
+        {
+            m_spritesheet.FPS = 3;
+            m_spritesheet.Color = Color.White;
+            m_spritesheet.SetAnimation("idle");
         }
 
         public void Initialize()
@@ -55,10 +65,30 @@ namespace DadSimulator.GraphicObjects
 
         public void Update(double elapsedTime)
         {
+            m_spritesheet.Update(elapsedTime);
             m_uiRectsToDraw.Clear();
 
-            m_movement.MovePlayer(elapsedTime);
+            var movement = m_movement.MovePlayer(elapsedTime);
+            SetAnimation(movement);
             InteractWithObjects();
+        }
+
+        private void SetAnimation(Vector2 movement)
+        {
+            string animation;
+            if (Vector2.Zero == movement)
+            {
+                animation = "idle";
+            }
+            else if (Math.Abs(movement.X) > Math.Abs(movement.Y))
+            {
+                animation = movement.X > 0 ? "walk-right" : "walk-left";
+            }
+            else
+            {
+                animation = movement.Y > 0 ? "walk-down" : "walk-up";
+            }
+            m_spritesheet.SetAnimation(animation);
         }
 
         private void InteractWithObjects()
@@ -136,7 +166,7 @@ namespace DadSimulator.GraphicObjects
 
         private void DrawPlayer(SpriteBatch batch)
         {
-            batch.Draw(m_texture, Position, null, Color.Red);
+            batch.Draw(m_spritesheet, Position, null, Color.Red);
         }
 
         public Vector2 GetPosition()

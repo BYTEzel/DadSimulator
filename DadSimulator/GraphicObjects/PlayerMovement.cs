@@ -28,23 +28,28 @@ namespace DadSimulator.GraphicObjects
             return Position;
         }
 
-        public void MovePlayer(double elapsedTime)
+        /// <summary>
+        /// Moves the player.
+        /// </summary>
+        /// <param name="elapsedTime">Total time passed.</param>
+        /// <returns>Movement vector.</returns>
+        public Vector2 MovePlayer(double elapsedTime)
         {
             var movements = m_movement.GetDirections();
-            if (movements.Count > 0)
-            {
-                HandleCollisions(elapsedTime, movements);
-            }
+            return HandleCollisions(elapsedTime, movements);
         }
 
-        private void HandleCollisions(double elapsedTime, List<Directions> movements)
+        private Vector2 HandleCollisions(double elapsedTime, List<Directions> movements)
         {
+            var deltaMovementTotal = Vector2.Zero;
             foreach (var mov in movements)
             {
                 var deltaMovement = ComputeEstimatedShift(elapsedTime, mov);
                 deltaMovement = CheckCollisionsWithEstimatedShiftAndCorrect(deltaMovement, mov);
                 Position += deltaMovement;
+                deltaMovementTotal += deltaMovement;
             }
+            return deltaMovementTotal;
         }
 
         private Vector2 ComputeEstimatedShift(double elapsedTime, Directions mov)

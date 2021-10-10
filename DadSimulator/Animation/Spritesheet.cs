@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace DadSimulator.Animation
 {
-    public class Spritesheet : IGraphicObject
+    public class Spritesheet : IGraphicObject, ISpritesheet
     {
         private readonly Texture2D m_spritesheet;
         private readonly List<string> m_animationNames;
@@ -30,7 +30,7 @@ namespace DadSimulator.Animation
             m_spritesheet = spritesheet;
             m_animationNames = animationNames;
             m_frameSize = new Size(
-                Convert.ToUInt32(m_spritesheet.Width / framesPerColumn), 
+                Convert.ToUInt32(m_spritesheet.Width / framesPerColumn),
                 Convert.ToUInt32(m_spritesheet.Height / m_animationNames.Count));
             m_animationIndex = 0;
             m_frameIndex = 0;
@@ -61,6 +61,7 @@ namespace DadSimulator.Animation
 
             m_animationIndex = index;
             m_frameIndex = 0;
+            m_timeSinceLastUpdate = 0;
         }
 
         public void Update(double elapsedTime)
