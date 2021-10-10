@@ -1,6 +1,6 @@
 ﻿namespace DadSimulator.Misc
 {
-    public struct Size
+    public class Size
     {
         public uint Width;
         public uint Height;
@@ -10,5 +10,11 @@
             this.Width = Width;
             this.Height = Height;
         }
+
+        public override string ToString()
+        {
+            return $"Size({Width}x{Height})";
+        }
+
     }
 }

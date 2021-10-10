@@ -56,7 +56,7 @@ namespace DadSimulator.GraphicObjects
         {
             m_spritesheet.FPS = 3;
             m_spritesheet.Color = Color.White;
-            m_spritesheet.SetAnimation("idle");
+            m_spritesheet.SetAnimation("idle-up");
         }
 
         public void Initialize()
@@ -78,7 +78,7 @@ namespace DadSimulator.GraphicObjects
             string animation;
             if (Vector2.Zero == movement)
             {
-                animation = "idle";
+                animation = "idle-up";
             }
             else if (Math.Abs(movement.X) > Math.Abs(movement.Y))
             {
@@ -166,7 +166,8 @@ namespace DadSimulator.GraphicObjects
 
         private void DrawPlayer(SpriteBatch batch)
         {
-            batch.Draw(m_spritesheet, Position, null, Color.Red);
+            m_spritesheet.Position = Position;
+            m_spritesheet.Draw(batch);
         }
 
         public Vector2 GetPosition()

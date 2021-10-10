@@ -1,4 +1,5 @@
-﻿using DadSimulator.Camera;
+﻿using DadSimulator.Animation;
+using DadSimulator.Camera;
 using DadSimulator.Collider;
 using DadSimulator.GraphicObjects;
 using DadSimulator.Interactable;
@@ -26,11 +27,7 @@ namespace DadSimulator
 
         public DadSimulator()
         {
-            m_screenSize = new Size()
-            {
-                Width = 1920,
-                Height = 1200
-            };
+            m_screenSize = new Size(1920, 1200);
             InitGraphics();
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
@@ -60,14 +57,19 @@ namespace DadSimulator
 
         protected override void LoadContent()
         {
-            m_camera = new Camera.Camera(m_screenSize, 2);
+            m_camera = new Camera.Camera(m_screenSize, 6);
             m_uiEngine = new UiEngine(GraphicsDevice, m_spriteBatch, m_font, m_font);
 
-            var collisionMap = new CollidableMap(new Size() { Width = 640, Height = 480 });
+            var collisionMap = new CollidableMap(new Size(640, 480));
             var levelBackgroundGrass = new LevelBackgroundDayNight(LoadTemplate(Templates.LevelGrassBackground), new Vector2(-500, -500), m_gameTimer);
             var levelBounds = new LevelBounds(this, Templates.LevelWalls, new Vector2(0, 0), collisionMap);
                 
-            var player = new Player(LoadTemplate(Templates.Character), new Vector2(200, 200), 
+            var player = new Player(
+                new Spritesheet(LoadTemplate(Templates.Character), 4, 
+                    new List<string>()
+                    { "idle-down", "walk-down", "idle-up", "walk-up", "idle-right", "walk-right", "idle-left", "walk-left"}),
+                new RectangleCollider(new Rectangle(4, 4, 12, 12)),
+                new Vector2(150, 150), 
                 new KeyboardUserCommand(), collisionMap, this, m_uiEngine); 
                 
             var washMaschine = new WashingMachine(LoadTemplate(Templates.Test), 
@@ -132,7 +134,7 @@ namespace DadSimulator
             switch (name)
             {
                 case Templates.Character:
-                    stringName = "Test/block";
+                    stringName = "Persons/dad";
                     break;
                 case Templates.Test:
                     stringName = "Test/block";
