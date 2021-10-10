@@ -57,7 +57,7 @@ namespace DadSimulator
 
         protected override void LoadContent()
         {
-            m_camera = new Camera.Camera(m_screenSize, 6);
+            m_camera = new Camera.Camera(m_screenSize, 8);
             m_uiEngine = new UiEngine(GraphicsDevice, m_spriteBatch, m_font, m_font);
 
             var collisionMap = new CollidableMap(new Size(640, 480));
@@ -67,7 +67,7 @@ namespace DadSimulator
             var player = new Player(
                 new Spritesheet(LoadTemplate(Templates.Character), 4, 
                     new List<string>()
-                    { "idle-down", "walk-down", "idle-up", "walk-up", "idle-right", "walk-right", "idle-left", "walk-left"}),
+                    { "idle-down", "walk-down", "idle-up", "walk-up", "idle-right", "idle-left", "walk-right", "walk-left"}),
                 new RectangleCollider(new Rectangle(4, 4, 12, 12)),
                 new Vector2(150, 150), 
                 new KeyboardUserCommand(), collisionMap, this, m_uiEngine); 

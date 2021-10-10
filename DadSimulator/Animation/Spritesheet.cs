@@ -59,9 +59,12 @@ namespace DadSimulator.Animation
                 throw new ArgumentException("Unknown animation name");
             }
 
-            m_animationIndex = index;
-            m_frameIndex = 0;
-            m_timeSinceLastUpdate = 0;
+            if (index != m_animationIndex)
+            {
+                m_animationIndex = index;
+                m_frameIndex = 0;
+                m_timeSinceLastUpdate = 0;
+            }
         }
 
         public void Update(double elapsedTime)
@@ -71,6 +74,7 @@ namespace DadSimulator.Animation
             if (m_timeSinceLastUpdate > updateFrequency)
             {
                 m_frameIndex = (m_frameIndex + 1) % m_maxFrames;
+                m_timeSinceLastUpdate = 0;
             }
         }
     }

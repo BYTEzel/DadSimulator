@@ -54,7 +54,7 @@ namespace DadSimulator.GraphicObjects
 
         private void ConfigureSpritesheet()
         {
-            m_spritesheet.FPS = 3;
+            m_spritesheet.FPS = 5;
             m_spritesheet.Color = Color.White;
             m_spritesheet.SetAnimation("idle-up");
         }
