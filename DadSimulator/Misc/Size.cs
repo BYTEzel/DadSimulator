@@ -5,10 +5,16 @@
         public uint Width;
         public uint Height;
 
-        public Size(uint Width, uint Height)
+        public Size(uint width, uint height)
         {
-            this.Width = Width;
-            this.Height = Height;
+            Width = width;
+            Height = height;
+        }
+
+        public Size(int width, int height)
+        {
+            Width = (uint)width;
+            Height = (uint)height;
         }
 
         public override string ToString()

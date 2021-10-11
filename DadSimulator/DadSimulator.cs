@@ -60,7 +60,8 @@ namespace DadSimulator
             m_camera = new Camera.Camera(m_screenSize, 8);
             m_uiEngine = new UiEngine(GraphicsDevice, m_spriteBatch, m_font, m_font);
 
-            var collisionMap = new CollidableMap(new Size(640, 480));
+            var bounds = LoadTemplate(Templates.LevelWalls);
+            var collisionMap = new CollidableMap(new Size(bounds.Width, bounds.Height));
             var levelBackgroundGrass = new LevelBackgroundDayNight(LoadTemplate(Templates.LevelGrassBackground), new Vector2(-500, -500), m_gameTimer);
             var levelBounds = new LevelBounds(this, Templates.LevelWalls, new Vector2(0, 0), collisionMap);
                 
@@ -68,7 +69,7 @@ namespace DadSimulator
                 new Spritesheet(LoadTemplate(Templates.Character), 4, 
                     new List<string>()
                     { "idle-down", "walk-down", "idle-up", "walk-up", "idle-right", "idle-left", "walk-right", "walk-left"}),
-                new RectangleCollider(new Rectangle(4, 4, 12, 12)),
+                new RectangleCollider(new Rectangle(2, 4, 14, 12)),
                 new Vector2(150, 150), 
                 new KeyboardUserCommand(), collisionMap, this, m_uiEngine); 
                 
@@ -143,10 +144,10 @@ namespace DadSimulator
                     stringName = "Test/collider-test";
                     break;
                 case Templates.LevelWalls:
-                    stringName = "level-bounds";
+                    stringName = "Level/walls";
                     break;
                 case Templates.LevelGrassBackground:
-                    stringName = "Backgrounds/level-background";
+                    stringName = "Level/level-background";
                     break;
                 default:
                     break;
