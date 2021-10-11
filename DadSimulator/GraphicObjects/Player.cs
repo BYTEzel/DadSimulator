@@ -56,7 +56,6 @@ namespace DadSimulator.GraphicObjects
 
         private void ConfigureSpritesheet()
         {
-            m_spritesheet.FPS = 5;
             m_spritesheet.Color = Color.White;
             m_spritesheet.SetAnimation("idle-down");
         }
@@ -79,26 +78,7 @@ namespace DadSimulator.GraphicObjects
         {
             if (Vector2.Zero == movement)
             {
-                if (m_animation == null)
-                {
-                    m_animation = "idle-down";
-                }
-                else if (m_animation.Contains("right"))
-                {
-                    m_animation = "idle-right";
-                }
-                else if (m_animation.Contains("down"))
-                {
-                    m_animation = "idle-down";
-                }
-                else if (m_animation.Contains("left"))
-                {
-                    m_animation = "idle-left";
-                }
-                else if (m_animation.Contains("up"))
-                {
-                    m_animation = "idle-up";
-                }
+                SetIdleAnimation();
             }
             else if (Math.Abs(movement.X) > Math.Abs(movement.Y))
             {
@@ -109,6 +89,31 @@ namespace DadSimulator.GraphicObjects
                 m_animation = movement.Y > 0 ? "walk-down" : "walk-up";
             }
             m_spritesheet.SetAnimation(m_animation);
+            m_spritesheet.FPS = m_animation.Contains("walk") ? 5 : 2;
+        }
+
+        private void SetIdleAnimation()
+        {
+            if (m_animation == null)
+            {
+                m_animation = "idle-down";
+            }
+            else if (m_animation.Contains("right"))
+            {
+                m_animation = "idle-right";
+            }
+            else if (m_animation.Contains("down"))
+            {
+                m_animation = "idle-down";
+            }
+            else if (m_animation.Contains("left"))
+            {
+                m_animation = "idle-left";
+            }
+            else if (m_animation.Contains("up"))
+            {
+                m_animation = "idle-up";
+            }
         }
 
         private void InteractWithObjects()
