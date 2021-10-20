@@ -67,6 +67,7 @@ namespace DadSimulator
             var levelFloor = new LevelBackground(LoadTemplate(Templates.LevelFloor), origin);
             var levelWalls = new LevelBounds(this, Templates.LevelWalls, origin, collisionMap);
             var levelInterior = new LevelBounds(this, Templates.LevelInterior, origin, collisionMap);
+            var levelInteriorBackground = new LevelBackground(LoadTemplate(Templates.LevelInteriorBackground), origin);
             var levelWindowsImages = new LevelBackground(LoadTemplate(Templates.LevelWindowsImages), origin);
                 
             var player = new Player(
@@ -82,6 +83,7 @@ namespace DadSimulator
 
             m_gameObjects.Add(levelBackgroundGrass);
             m_gameObjects.Add(levelFloor);
+            m_gameObjects.Add(levelInteriorBackground);
             m_gameObjects.Add(levelInterior);
             m_gameObjects.Add(levelWalls);
             m_gameObjects.Add(levelWindowsImages);
@@ -164,6 +166,9 @@ namespace DadSimulator
                     break;
                 case Templates.LevelWindowsImages:
                     stringName = "Level/windows-images";
+                    break;
+                case Templates.LevelInteriorBackground:
+                    stringName = "Level/interior-background";
                     break;
                 default:
                     break;
