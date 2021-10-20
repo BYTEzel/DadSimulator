@@ -1,3 +1,4 @@
+using DadSimulator.Animation;
 using DadSimulator.Collider;
 using DadSimulator.GraphicObjects;
 using DadSimulator.Interactable;
@@ -117,6 +118,11 @@ namespace DadSimulator.Tests
         public void DrawText(Vector2 positionTopLeft, Color color, string text, bool isHeadline, float scaling = 1)
         {
         }
+
+        public void DrawRectangleInteractable(Vector2 positionInteractable, RelativePosition relativePosition, string headline, string textInBox, Color colorBox, Color colorBorder, int borderSize = 2)
+        {
+            DrawRectangleInteractableCalled = true;
+        }
     }
 
     class InteractableList : IInteractableCollection
@@ -134,9 +140,42 @@ namespace DadSimulator.Tests
         }
     }
 
+
+    class SpritesheetTest : ISpritesheet
+    {
+        public Color Color { get; set; }
+        public float FPS { get; set; }
+        public Vector2 Position { get; set; }
+        public SpritesheetTest()
+        {
+            Color = Color.White;
+            FPS = 1.0f;
+            Position = Vector2.Zero;
+        }
+
+        public void Draw(SpriteBatch batch)
+        {
+        }
+
+        public void Initialize()
+        {
+        }
+
+        public void SetAnimation(string animationName)
+        {
+        }
+
+        public void Update(double elapsedTime)
+        {
+        }
+    }
+
+
     public class PlayerTest
     {
         private Texture2D m_texture;
+        private ISpritesheet m_spritesheet;
+        private ICollider m_collider;
 
         private const int m_textureWidth = 10;
         private const int m_textureHeight = 10;
@@ -145,6 +184,8 @@ namespace DadSimulator.Tests
         public void Setup()
         {
             m_texture = GraphicsLoader.LoadTemplate(Templates.Test);
+            m_spritesheet = new SpritesheetTest();
+            m_collider = new RectangleCollider(m_texture);
         }
 
         [Test]
@@ -159,7 +200,7 @@ namespace DadSimulator.Tests
         {
             var startPosition = Vector2.Zero;
 
-            var objTopLeft = new Player(m_texture, startPosition, new MovementInput(), null, null, null);
+            var objTopLeft = new Player(m_spritesheet, m_collider, startPosition, new MovementInput(), null, null, null);
             Assert.AreEqual(0, objTopLeft.Position.X);
             Assert.AreEqual(0, objTopLeft.Position.Y);
         }
@@ -168,7 +209,7 @@ namespace DadSimulator.Tests
         public void Move()
         {
             var movement = new MovementInput();
-            var obj = new Player(m_texture, Vector2.Zero, movement, null, null, null);
+            var obj = new Player(m_spritesheet, m_collider, Vector2.Zero, movement, null, null, null);
 
             UpdateDirection(ref obj, movement, new List<Directions> { Directions.Up });
             Assert.AreEqual(0, obj.Position.X);
@@ -199,13 +240,13 @@ namespace DadSimulator.Tests
             var interactionPosition = new Vector2(100, 0);
 
             var movement = new MovementInput();
-            var collisionChecker = new CollidableMap(new Misc.Size() { Width=10, Height=10 });
+            var collisionChecker = new CollidableMap(new Misc.Size(10, 10));
             var interactable = new InteractableTest(interactionPosition);
             var interactableCollection = new InteractableList();
             interactableCollection.Interactables.Add(interactable); 
             var ui = new UiTest();
 
-            var player = new Player(m_texture, startPositionPlayer, movement, collisionChecker, interactableCollection, ui);
+            var player = new Player(m_spritesheet, m_collider, startPositionPlayer, movement, collisionChecker, interactableCollection, ui);
 
             // If no action button is pressed, nothing should happen
             player.Update(0);

@@ -10,7 +10,7 @@ namespace DadSimulator.Tests
         [Test]
         public void CreateMap()
         {
-            var size = new Size() { Height = 10, Width = 10 };
+            var size = new Size(10, 10);
             CollidableMap map = new CollidableMap(size);
 
             var nonColliding = new AlignedPointCloud()
@@ -25,7 +25,7 @@ namespace DadSimulator.Tests
         [Test]
         public void AddRectangleExceptions()
         {
-            CollidableMap map = new CollidableMap(new Size() { Height = 10, Width = 10 });
+            CollidableMap map = new CollidableMap(new Size(10, 10));
             Assert.DoesNotThrow(()=> map.AddRectangle(new Rectangle(0, 0, 5, 5)));
             Assert.Throws<System.ArgumentOutOfRangeException>(() => map.AddRectangle(new Rectangle(0, 0, 100, 100)));
         }
@@ -33,7 +33,7 @@ namespace DadSimulator.Tests
         [Test]
         public void AddRectangle()
         {
-            CollidableMap map = new CollidableMap(new Size() { Height = 10, Width = 10 });
+            CollidableMap map = new CollidableMap(new Size(10, 10));
             map.AddRectangle(new Rectangle(0, 0, 5, 5));
 
             var pointCloud = new PointCloud
@@ -75,7 +75,7 @@ namespace DadSimulator.Tests
         [Test]
         public void AddPointCloud()
         {
-            var map = new CollidableMap(new Size() { Height = 10, Width = 10 });
+            var map = new CollidableMap(new Size(10, 10));
             var apc = new AlignedPointCloud
             {
                 PointCloud = new PointCloud() { PointsInOrigin = { new Point(1, 1), new Point(2, 2) } },
