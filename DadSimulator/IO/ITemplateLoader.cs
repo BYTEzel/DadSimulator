@@ -3,7 +3,12 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DadSimulator.IO
 {
-    public enum Templates { Test, TestTextureTransparency, Character, LevelWalls, LevelGrassBackground }
+    public enum Templates 
+    {
+        Test, TestTextureTransparency, 
+        Character, 
+        LevelGrassBackground, LevelFloor, LevelInterior, LevelWalls, LevelWindowsImages
+    }
 
     public interface ITemplateLoader
     {

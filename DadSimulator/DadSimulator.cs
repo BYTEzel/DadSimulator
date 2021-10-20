@@ -149,6 +149,15 @@ namespace DadSimulator
                 case Templates.LevelGrassBackground:
                     stringName = "Level/level-background";
                     break;
+                case Templates.LevelFloor:
+                    stringName = "Level/floor";
+                    break;
+                case Templates.LevelInterior:
+                    stringName = "Level/interior";
+                    break;
+                case Templates.LevelWindowsImages:
+                    stringName = "Level/windows-images";
+                    break;
                 default:
                     break;
             }
