@@ -60,24 +60,31 @@ namespace DadSimulator
             m_camera = new Camera.Camera(m_screenSize, 8);
             m_uiEngine = new UiEngine(GraphicsDevice, m_spriteBatch, m_font, m_font);
 
-            var bounds = LoadTemplate(Templates.LevelWalls);
-            var collisionMap = new CollidableMap(new Size(bounds.Width, bounds.Height));
-            var levelBackgroundGrass = new LevelBackgroundDayNight(LoadTemplate(Templates.LevelGrassBackground), new Vector2(-500, -500), m_gameTimer);
-            var levelBounds = new LevelBounds(this, Templates.LevelWalls, new Vector2(0, 0), collisionMap);
+            var origin = Vector2.Zero;
+            var grassBackgroundTexture = LoadTemplate(Templates.LevelGrassBackground);
+            var collisionMap = new CollidableMap(new Size(grassBackgroundTexture.Width, grassBackgroundTexture.Height));
+            var levelBackgroundGrass = new LevelBackgroundDayNight(grassBackgroundTexture, origin, m_gameTimer);
+            var levelFloor = new LevelBackground(LoadTemplate(Templates.LevelFloor), origin);
+            var levelWalls = new LevelBounds(this, Templates.LevelWalls, origin, collisionMap);
+            var levelInterior = new LevelBounds(this, Templates.LevelInterior, origin, collisionMap);
+            var levelWindowsImages = new LevelBackground(LoadTemplate(Templates.LevelWindowsImages), origin);
                 
             var player = new Player(
                 new Spritesheet(LoadTemplate(Templates.Character), 4, 
                     new List<string>()
                     { "idle-down", "walk-down", "idle-up", "walk-up", "idle-right", "idle-left", "walk-right", "walk-left"}),
                 new RectangleCollider(new Rectangle(2, 4, 14, 12)),
-                new Vector2(150, 150), 
+                new Vector2(686, 480), 
                 new KeyboardUserCommand(), collisionMap, this, m_uiEngine); 
                 
             var washMaschine = new WashingMachine(LoadTemplate(Templates.Test), 
                 new Vector2(200, 50), new Vector2(201, 51));
 
             m_gameObjects.Add(levelBackgroundGrass);
-            m_gameObjects.Add(levelBounds);
+            m_gameObjects.Add(levelFloor);
+            m_gameObjects.Add(levelInterior);
+            m_gameObjects.Add(levelWalls);
+            m_gameObjects.Add(levelWindowsImages);
             m_gameObjects.Add(washMaschine);
             m_gameObjects.Add(player);
 
