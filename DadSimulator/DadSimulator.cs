@@ -82,7 +82,7 @@ namespace DadSimulator
             var washMaschine = new WashingMachine(
                 new Spritesheet(LoadTemplate(Templates.WashingMachine), 4, 
                 new List<string>() { "idle", "washing"}),
-                new Vector2(592, 480), new Vector2(600, 488));
+                new Vector2(592, 480), new Vector2(600, 488), m_gameTimer);
 
             m_gameObjects.Add(levelBackgroundGrass);
             m_gameObjects.Add(levelFloor);

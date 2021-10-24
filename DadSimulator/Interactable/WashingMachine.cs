@@ -1,7 +1,9 @@
 ﻿using DadSimulator.Animation;
 using DadSimulator.GraphicObjects;
+using DadSimulator.Misc;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace DadSimulator.Interactable
 {
@@ -10,15 +12,20 @@ namespace DadSimulator.Interactable
         private bool m_isRunning;
         private readonly Spritesheet m_spritesheet;
         private Vector2 m_interactionPosition;
+        private readonly TimeSpan m_washTime;
+        private TimeSpan m_startTime;
+        private readonly Timer m_timer;
 
-        public WashingMachine(Spritesheet spritesheet, Vector2 position, Vector2 interactionPosition)
+        public WashingMachine(Spritesheet spritesheet, Vector2 position, Vector2 interactionPosition, Timer timer)
         {
             m_isRunning = false;
             m_spritesheet = spritesheet;
             m_spritesheet.Position = position;
-            m_spritesheet.FPS = 1;
+            m_spritesheet.FPS = 2;
             m_interactionPosition = interactionPosition;
             SetAnimationState();
+            m_washTime = new TimeSpan(0, 15, 0);
+            m_timer = timer;
         }
 
         public void ExecuteCommand()
@@ -33,8 +40,8 @@ namespace DadSimulator.Interactable
 
         private void SwitchMachineOn()
         {
+            m_startTime = m_timer.GetGameTime();
             m_isRunning = true;
-            SetAnimationState();
         }
 
 
@@ -66,6 +73,15 @@ namespace DadSimulator.Interactable
 
         public void Update(double elapsedTime)
         {
+            if (m_isRunning)
+            {
+                if (m_timer.GetGameTime()- m_startTime > m_washTime)
+                {
+                    m_isRunning = false;
+                }
+            }
+            SetAnimationState();
+            m_spritesheet.Update(elapsedTime);
         }
 
         public void Draw(SpriteBatch batch)

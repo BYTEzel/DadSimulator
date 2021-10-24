@@ -37,6 +37,7 @@ namespace DadSimulator.Animation
             m_timeSinceLastUpdate = 0;
             m_maxFrames = framesPerColumn;
             FPS = 1.0f;
+            Color = Color.White;
         }
 
         public void Draw(SpriteBatch batch)
