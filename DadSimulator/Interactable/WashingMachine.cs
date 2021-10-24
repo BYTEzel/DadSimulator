@@ -1,4 +1,5 @@
-﻿using DadSimulator.GraphicObjects;
+﻿using DadSimulator.Animation;
+using DadSimulator.GraphicObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -7,15 +8,17 @@ namespace DadSimulator.Interactable
     public class WashingMachine : IInteractable, IGraphicObject
     {
         private bool m_isRunning;
-        private readonly Texture2D m_texture;
-        private Vector2 m_position, m_interactionPosition;
+        private readonly Spritesheet m_spritesheet;
+        private Vector2 m_interactionPosition;
 
-        public WashingMachine(Texture2D texture, Vector2 position, Vector2 interactionPosition)
+        public WashingMachine(Spritesheet spritesheet, Vector2 position, Vector2 interactionPosition)
         {
             m_isRunning = false;
-            m_texture = texture;
-            m_position = position;
+            m_spritesheet = spritesheet;
+            m_spritesheet.Position = position;
+            m_spritesheet.FPS = 1;
             m_interactionPosition = interactionPosition;
+            SetAnimationState();
         }
 
         public void ExecuteCommand()
@@ -23,9 +26,15 @@ namespace DadSimulator.Interactable
             SwitchMachineOn();
         }
 
+        private void SetAnimationState()
+        {
+            m_spritesheet.SetAnimation(m_isRunning ? "washing" : "idle");
+        }
+
         private void SwitchMachineOn()
         {
             m_isRunning = true;
+            SetAnimationState();
         }
 
 
@@ -61,7 +70,7 @@ namespace DadSimulator.Interactable
 
         public void Draw(SpriteBatch batch)
         {
-            batch.Draw(m_texture, m_position, null, Color.Red);
+            m_spritesheet.Draw(batch);
         }
 
 

@@ -57,8 +57,9 @@ namespace DadSimulator
 
         protected override void LoadContent()
         {
-            m_camera = new Camera.Camera(m_screenSize, 8);
-            m_uiEngine = new UiEngine(GraphicsDevice, m_spriteBatch, m_font, m_font);
+            const float zoom = 8.0f;
+            m_camera = new Camera.Camera(m_screenSize, zoom);
+            m_uiEngine = new UiEngine(GraphicsDevice, m_spriteBatch, m_font, m_font, zoom);
 
             var origin = Vector2.Zero;
             var grassBackgroundTexture = LoadTemplate(Templates.LevelGrassBackground);
@@ -78,8 +79,10 @@ namespace DadSimulator
                 new Vector2(686, 480), 
                 new KeyboardUserCommand(), collisionMap, this, m_uiEngine); 
                 
-            var washMaschine = new WashingMachine(LoadTemplate(Templates.Test), 
-                new Vector2(200, 50), new Vector2(201, 51));
+            var washMaschine = new WashingMachine(
+                new Spritesheet(LoadTemplate(Templates.WashingMachine), 4, 
+                new List<string>() { "idle", "washing"}),
+                new Vector2(592, 480), new Vector2(600, 488));
 
             m_gameObjects.Add(levelBackgroundGrass);
             m_gameObjects.Add(levelFloor);
@@ -169,6 +172,9 @@ namespace DadSimulator
                     break;
                 case Templates.LevelInteriorBackground:
                     stringName = "Level/interior-background";
+                    break;
+                case Templates.WashingMachine:
+                    stringName = "Interactables/washing-machine";
                     break;
                 default:
                     break;

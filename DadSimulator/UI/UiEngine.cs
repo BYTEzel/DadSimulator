@@ -9,14 +9,16 @@ namespace DadSimulator.UI
         private readonly Texture2D m_rectBase;
         private readonly SpriteFont m_fontHeadline, m_fontText;
         private readonly SpriteBatch m_spriteBatch;
+        private readonly float m_zoom;
 
-        public UiEngine(GraphicsDevice graphics, SpriteBatch batch, SpriteFont fontHeadline, SpriteFont fontText)
+        public UiEngine(GraphicsDevice graphics, SpriteBatch batch, SpriteFont fontHeadline, SpriteFont fontText, float zoom)
         {
             m_rectBase = new Texture2D(graphics, 1, 1);
             m_rectBase.SetData(new[] { Color.White });
             m_fontHeadline = fontHeadline;
             m_fontText = fontText;
             m_spriteBatch = batch;
+            m_zoom = zoom;
         }
 
         ~UiEngine()
@@ -40,20 +42,21 @@ namespace DadSimulator.UI
 
         public void DrawRectangleInteractable(Vector2 positionInteractable, RelativePosition relativePosition, string headline, string textInBox, Color colorBox, Color colorBorder, int borderSize = 2)
         {
-            const float scalingHeadline = 0.7f;
-            const float scalingText = 0.5f;
-            var padding = 10 + borderSize / 2;
-            const int shift = 50;
+            float scalingHeadline = 0.7f;
+            float scalingText = 0.5f;
+            float scalingFactor = 1 / m_zoom;
+            var padding = (int)((20 + borderSize / 2) * scalingFactor);
+            int shift = (int)(50 * scalingFactor);
 
-            var textSizeHeadline = m_fontHeadline.MeasureString(headline) * scalingHeadline;
-            var textSizeInBox = m_fontText.MeasureString(textInBox) * scalingText;
+            var textSizeHeadline = m_fontHeadline.MeasureString(headline) * scalingHeadline * scalingFactor;
+            var textSizeInBox = m_fontText.MeasureString(textInBox) * scalingText * scalingFactor;
 
             Point positionTopLeft = ComputeTopLeftPosition(positionInteractable, relativePosition,
                 padding, shift, textSizeHeadline, textSizeInBox);
 
             Rectangle rectangleContent = ComputeRectangle(padding, textSizeHeadline, textSizeInBox, positionTopLeft);
 
-            DrawRectangleBorder(colorBorder, borderSize, rectangleContent);
+            DrawRectangleBorder(colorBorder, System.Math.Max(1,(int)(borderSize * scalingFactor)), rectangleContent);
             DrawRectangle(rectangleContent, colorBox);
             DrawText(new Vector2(positionTopLeft.X + padding, positionTopLeft.Y + padding), Color.White, headline, true, scalingHeadline);
             DrawText(new Vector2(positionTopLeft.X + padding, positionTopLeft.Y + textSizeHeadline.Y + padding), Color.White, textInBox, false, scalingText);
@@ -103,7 +106,7 @@ namespace DadSimulator.UI
         public void DrawText(Vector2 positionTopLeft, Color color, string text, bool isHeadline, float scaling = 1.0f)
         {
             var font = isHeadline ? m_fontHeadline : m_fontText;
-            m_spriteBatch.DrawString(font, text, positionTopLeft, color, 0, Vector2.Zero, scaling, SpriteEffects.None, 0);
+            m_spriteBatch.DrawString(font, text, positionTopLeft, color, 0, Vector2.Zero, scaling * (1/m_zoom), SpriteEffects.None, 0);
 
         }
     }

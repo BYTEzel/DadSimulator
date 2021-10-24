@@ -144,7 +144,7 @@ namespace DadSimulator.GraphicObjects
                 RelativePosistion = relativePos,
                 TextHeadline = interactable.GetName(),
                 TextBox = text,
-                RectColor = new Color(0, 0, 0, 128),
+                RectColor = new Color(0, 0, 0, 200),
                 BorderColor = Color.White
             });
 

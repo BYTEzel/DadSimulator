@@ -7,7 +7,8 @@ namespace DadSimulator.IO
     {
         Test, TestTextureTransparency, 
         Character, 
-        LevelGrassBackground, LevelFloor, LevelInterior, LevelInteriorBackground, LevelWalls, LevelWindowsImages
+        LevelGrassBackground, LevelFloor, LevelInterior, LevelInteriorBackground, LevelWalls, LevelWindowsImages,
+        WashingMachine
     }
 
     public interface ITemplateLoader
