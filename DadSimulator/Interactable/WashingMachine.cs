@@ -15,8 +15,9 @@ namespace DadSimulator.Interactable
         private readonly TimeSpan m_washTime;
         private TimeSpan m_startTime;
         private readonly Timer m_timer;
+        private readonly Stats m_stats;
 
-        public WashingMachine(Spritesheet spritesheet, Vector2 position, Vector2 interactionPosition, Timer timer)
+        public WashingMachine(Spritesheet spritesheet, Vector2 position, Vector2 interactionPosition, Timer timer, Stats stats)
         {
             m_isRunning = false;
             m_spritesheet = spritesheet;
@@ -26,6 +27,8 @@ namespace DadSimulator.Interactable
             SetAnimationState();
             m_washTime = new TimeSpan(0, 15, 0);
             m_timer = timer;
+            m_stats = stats;
+            m_stats.ChangeValue(StatName.Clothing, -10);
         }
 
         public void ExecuteCommand()
@@ -77,6 +80,7 @@ namespace DadSimulator.Interactable
             {
                 if (m_timer.GetGameTime()- m_startTime > m_washTime)
                 {
+                    m_stats.ChangeValue(StatName.Clothing, 20);
                     m_isRunning = false;
                 }
             }

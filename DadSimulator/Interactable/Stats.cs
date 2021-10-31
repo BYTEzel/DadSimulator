@@ -7,15 +7,25 @@ namespace DadSimulator.Interactable
     public class Stats
     {
         private readonly Dictionary<StatName, RangedValue> m_stats;
-
+        public const double Min = 0;
+        public const double Max = 100;
 
         public Stats()
         {
-            const double min = 0, max = 100;
             m_stats = new Dictionary<StatName, RangedValue>
             {
-                { StatName.Clothing, new RangedValue(min, max, max) }
+                { StatName.Clothing, new RangedValue(Min, Max, Max) }
             };
+        }
+
+        public double Request(StatName name)
+        {
+            return m_stats[name].Value;
+        }
+
+        public void ChangeValue(StatName name, double diff)
+        {
+            m_stats[name].Change(diff);
         }
 
     }

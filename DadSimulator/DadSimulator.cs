@@ -61,6 +61,8 @@ namespace DadSimulator
             m_camera = new Camera.Camera(m_screenSize, zoom);
             m_uiEngine = new UiEngine(GraphicsDevice, m_spriteBatch, m_font, m_font, zoom);
 
+            var gameStats = new Stats();
+
             var origin = Vector2.Zero;
             var grassBackgroundTexture = LoadTemplate(Templates.LevelGrassBackground);
             var collisionMap = new CollidableMap(new Size(grassBackgroundTexture.Width, grassBackgroundTexture.Height));
@@ -82,7 +84,8 @@ namespace DadSimulator
             var washMaschine = new WashingMachine(
                 new Spritesheet(LoadTemplate(Templates.WashingMachine), 4, 
                 new List<string>() { "idle", "washing"}),
-                new Vector2(592, 480), new Vector2(600, 488), m_gameTimer);
+                new Vector2(592, 480), new Vector2(600, 488), 
+                m_gameTimer, gameStats);
 
             m_gameObjects.Add(levelBackgroundGrass);
             m_gameObjects.Add(levelFloor);
