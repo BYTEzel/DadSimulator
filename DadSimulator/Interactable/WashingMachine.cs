@@ -1,37 +1,30 @@
 ﻿using DadSimulator.Animation;
-using DadSimulator.GraphicObjects;
 using DadSimulator.Misc;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System;
 
 namespace DadSimulator.Interactable
 {
-    public class WashingMachine : IInteractable, IGraphicObject
+    public class WashingMachine : AnimatedInteractableBase
     {
         private bool m_isRunning;
-        private readonly Spritesheet m_spritesheet;
-        private Vector2 m_interactionPosition;
         private readonly TimeSpan m_washTime;
         private TimeSpan m_startTime;
         private readonly Timer m_timer;
-        private readonly Stats m_stats;
 
-        public WashingMachine(Spritesheet spritesheet, Vector2 position, Vector2 interactionPosition, Timer timer, Stats stats)
+        public WashingMachine(Spritesheet spritesheet, Vector2 position, Vector2 interactionPosition, Timer timer, Stats stats) : 
+            base(spritesheet, position, interactionPosition, stats)
         {
             m_isRunning = false;
-            m_spritesheet = spritesheet;
             m_spritesheet.Position = position;
             m_spritesheet.FPS = 2;
-            m_interactionPosition = interactionPosition;
             SetAnimationState();
             m_washTime = new TimeSpan(0, 15, 0);
             m_timer = timer;
-            m_stats = stats;
             m_stats.ChangeValue(StatName.Clothing, -10);
         }
 
-        public void ExecuteCommand()
+        public override void ExecuteCommand()
         {
             SwitchMachineOn();
         }
@@ -48,17 +41,17 @@ namespace DadSimulator.Interactable
         }
 
 
-        public string GetCommand()
+        public override string GetCommand()
         {
             return m_isRunning ? null : "Switch on";
         }
 
-        public string GetName()
+        public override string GetName()
         {
             return "Washing machine";
         }
 
-        public string GetState()
+        public override string GetState()
         {
             if (m_isRunning)
             {
@@ -70,11 +63,8 @@ namespace DadSimulator.Interactable
             }
         }
 
-        public void Initialize()
-        {
-        }
 
-        public void Update(double elapsedTime)
+        public override void Update(double elapsedTime)
         {
             if (m_isRunning)
             {
@@ -85,18 +75,7 @@ namespace DadSimulator.Interactable
                 }
             }
             SetAnimationState();
-            m_spritesheet.Update(elapsedTime);
-        }
-
-        public void Draw(SpriteBatch batch)
-        {
-            m_spritesheet.Draw(batch);
-        }
-
-
-        public Vector2 GetPosition()
-        {
-            return m_interactionPosition;
+            base.Update(elapsedTime);
         }
     }
 }
