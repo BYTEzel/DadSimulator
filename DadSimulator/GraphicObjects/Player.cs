@@ -22,8 +22,9 @@ namespace DadSimulator.GraphicObjects
         private readonly IUserCommand m_userCommand;
 
         private readonly PlayerMovement m_movement;
-
         private readonly char m_actionKey;
+
+        private readonly TimeWarp m_timeWarp;
 
         private string m_animation;
 
@@ -42,7 +43,7 @@ namespace DadSimulator.GraphicObjects
 
         public Player(ISpritesheet spritesheet, ICollider collider, Vector2 startPosition, 
             IUserCommand movement, ICollisionChecker collisionChecker, 
-            IInteractableCollection interactableCollection, IUiEngine gui)
+            IInteractableCollection interactableCollection, IUiEngine gui, TimeWarp timeWarp)
         {
             m_spritesheet = spritesheet;
             ConfigureSpritesheet();
@@ -52,6 +53,7 @@ namespace DadSimulator.GraphicObjects
             m_ui = gui;
             m_uiRectsToDraw = new List<UiRectInteractable>();
             m_actionKey = movement.GetActionKey();
+            m_timeWarp = timeWarp;
         }
 
         private void ConfigureSpritesheet()
@@ -66,12 +68,15 @@ namespace DadSimulator.GraphicObjects
 
         public void Update(double elapsedTime)
         {
-            m_spritesheet.Update(elapsedTime);
-            m_uiRectsToDraw.Clear();
+            if (!m_timeWarp.WarpInProgress)
+            {
+                m_spritesheet.Update(elapsedTime);
+                m_uiRectsToDraw.Clear();
 
-            var movement = m_movement.MovePlayer(elapsedTime);
-            SetAnimation(movement);
-            InteractWithObjects();
+                var movement = m_movement.MovePlayer(elapsedTime);
+                SetAnimation(movement);
+                InteractWithObjects();
+            }
         }
 
         private void SetAnimation(Vector2 movement)

@@ -17,8 +17,10 @@ namespace DadSimulator
     {
         private GraphicsDeviceManager m_graphics;
         private SpriteBatch m_spriteBatch;
-        private List<IGraphicObject> m_gameObjects;
-        private List<IInteractable> m_interactables;
+        private readonly List<IGraphicObject> m_gameObjects;
+        private readonly List<IInteractable> m_interactables;
+        private readonly List<IUpdate> m_updateables;
+        private readonly TimeWarp m_timeWarp;
         private SpriteFont m_font;
         private IUiEngine m_uiEngine;
         private readonly Timer m_gameTimer;
@@ -33,7 +35,9 @@ namespace DadSimulator
             IsMouseVisible = true;
             m_gameObjects = new List<IGraphicObject>();
             m_interactables = new List<IInteractable>();
+            m_updateables = new List<IUpdate>();
             m_gameTimer = new Timer();
+            m_timeWarp = new TimeWarp(m_gameTimer);
         }
 
         private void InitGraphics()
@@ -79,7 +83,7 @@ namespace DadSimulator
                     { "idle-down", "walk-down", "idle-up", "walk-up", "idle-right", "idle-left", "walk-right", "walk-left"}),
                 new RectangleCollider(new Rectangle(2, 4, 14, 12)),
                 new Vector2(686, 480), 
-                new KeyboardUserCommand(), collisionMap, this, m_uiEngine); 
+                new KeyboardUserCommand(), collisionMap, this, m_uiEngine, m_timeWarp); 
                 
             var washMaschine = new WashingMachine(
                 new Spritesheet(LoadTemplate(Templates.WashingMachine), 4, 
@@ -91,7 +95,7 @@ namespace DadSimulator
                 new Spritesheet(LoadTemplate(Templates.ChangingTable), 1,
                 new List<string>() { "stash-100", "stash-75", "stash-50", "stash-25", "stash-0" }),
                 new Vector2(47 * 16, 41 * 16), new Vector2(47 * 16 + 8, 41 * 16 + 8),
-                gameStats);
+                gameStats, m_timeWarp);
 
             m_gameObjects.Add(levelBackgroundGrass);
             m_gameObjects.Add(levelFloor);
@@ -107,6 +111,10 @@ namespace DadSimulator
             m_interactables.Add(changingTable);
 
             m_camera.Follow(player);
+
+            m_updateables.Add(m_gameTimer);
+            m_updateables.Add(m_timeWarp);
+
             // TODO: use this.Content to load your game content here
         }
 
@@ -121,7 +129,12 @@ namespace DadSimulator
             {
                 gameObj.Update(gameSeconds);
             }
-            m_gameTimer.Update(gameTime);
+
+            foreach (var updateable in m_updateables)
+            {
+                updateable.Update(gameTime.TotalGameTime.TotalSeconds);
+            }
+
             m_camera.UpdatePosition();
             // TODO: Add your update logic here
             base.Update(gameTime);

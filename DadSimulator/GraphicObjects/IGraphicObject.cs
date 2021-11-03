@@ -1,11 +1,11 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using DadSimulator.Misc;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace DadSimulator.GraphicObjects
 {
-    public interface IGraphicObject
+    public interface IGraphicObject : IUpdate
     {
         void Initialize();
-        void Update(double elapsedTime);
         void Draw(SpriteBatch batch);
     }
 }
