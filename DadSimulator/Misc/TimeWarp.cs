@@ -19,7 +19,7 @@ namespace DadSimulator.Misc
             m_increment = new TimeSpan(0);
         }
 
-        public bool TimeWarpDone
+        private bool TimeWarpDone
         { 
             get
             {

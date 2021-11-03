@@ -19,7 +19,7 @@ namespace DadSimulator.Interactable
             m_spritesheet.Position = position;
             m_spritesheet.FPS = 2;
             SetAnimationState();
-            m_washTime = new TimeSpan(0, 15, 0);
+            m_washTime = new TimeSpan(1, 0, 0);
             m_timer = timer;
             m_stats.ChangeValue(StatName.Clothing, -10);
         }

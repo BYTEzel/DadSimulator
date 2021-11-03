@@ -18,6 +18,7 @@ namespace DadSimulator.GraphicObjects
         private readonly ISpritesheet m_spritesheet;
 
         private readonly IInteractableCollection m_interactableCollection;
+        private IInteractable m_currentInteractionObject;
         private readonly IUiEngine m_ui;
         private readonly IUserCommand m_userCommand;
 
@@ -50,6 +51,7 @@ namespace DadSimulator.GraphicObjects
             m_userCommand = movement;
             m_movement = new PlayerMovement(startPosition, movement, collider, collisionChecker);
             m_interactableCollection = interactableCollection;
+            m_currentInteractionObject = null;
             m_ui = gui;
             m_uiRectsToDraw = new List<UiRectInteractable>();
             m_actionKey = movement.GetActionKey();
@@ -68,14 +70,27 @@ namespace DadSimulator.GraphicObjects
 
         public void Update(double elapsedTime)
         {
+            m_uiRectsToDraw.Clear();
+            
             if (!m_timeWarp.WarpInProgress)
             {
                 m_spritesheet.Update(elapsedTime);
-                m_uiRectsToDraw.Clear();
 
                 var movement = m_movement.MovePlayer(elapsedTime);
                 SetAnimation(movement);
                 InteractWithObjects();
+            }
+            else
+            {
+                m_uiRectsToDraw.Add(new UiRectInteractable()
+                {
+                    BorderColor = Color.Blue,
+                    PositionInteractable = m_currentInteractionObject.GetPosition(),
+                    RelativePosistion = RelativePositionInteractableObject,
+                    RectColor = new Color(0, 0, 0, 200),
+                    TextBox = m_currentInteractionObject.GetState(),
+                    TextHeadline = m_currentInteractionObject.GetName()
+                }); ;
             }
         }
 
@@ -131,31 +146,36 @@ namespace DadSimulator.GraphicObjects
                     var interactablePosition = interactable.GetPosition();
                     if (m_interactionRadius >= Vector2.Distance(Position, interactablePosition))
                     {
-                        HandleInteraction(interactable, interactablePosition);
+                        m_currentInteractionObject = interactable;
+                        HandleInteraction();
                     }
                 }
             }
         }
 
-        private void HandleInteraction(IInteractable interactable, Vector2 interactablePosition)
+        private RelativePosition RelativePositionInteractableObject => Position.Y > m_currentInteractionObject.GetPosition().Y ? RelativePosition.Top : RelativePosition.Bottom;
+
+
+        private void HandleInteraction()
         {
-            var text = AssembleInteractableText(interactable);
-
-            var relativePos = Position.Y > interactablePosition.Y ? RelativePosition.Top : RelativePosition.Bottom;
-
-            m_uiRectsToDraw.Add(new UiRectInteractable()
+            if (m_currentInteractionObject != null)
             {
-                PositionInteractable = interactablePosition,
-                RelativePosistion = relativePos,
-                TextHeadline = interactable.GetName(),
-                TextBox = text,
-                RectColor = new Color(0, 0, 0, 200),
-                BorderColor = Color.White
-            });
+                var text = AssembleInteractableText(m_currentInteractionObject);
 
-            if (m_userCommand.IsActionKeyPressed())
-            {
-                interactable.ExecuteCommand();
+                m_uiRectsToDraw.Add(new UiRectInteractable()
+                {
+                    PositionInteractable = m_currentInteractionObject.GetPosition(),
+                    RelativePosistion = RelativePositionInteractableObject,
+                    TextHeadline = m_currentInteractionObject.GetName(),
+                    TextBox = text,
+                    RectColor = new Color(0, 0, 0, 200),
+                    BorderColor = Color.White
+                });
+
+                if (m_userCommand.IsActionKeyPressed())
+                {
+                    m_currentInteractionObject.ExecuteCommand();
+                }
             }
         }
 

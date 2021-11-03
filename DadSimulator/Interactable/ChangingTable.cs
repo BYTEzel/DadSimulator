@@ -37,7 +37,7 @@ namespace DadSimulator.Interactable
 
         public override string GetCommand()
         {
-            return "Change diapers/clothes";
+            return "change diapers/clothes";
         }
 
         public override string GetName()
@@ -47,6 +47,10 @@ namespace DadSimulator.Interactable
 
         public override string GetState()
         {
+            if (m_timeWarp.WarpInProgress)
+            {
+                return "Changing diapers/clothes...";
+            }
             return m_stats.RequestFormated(new List<StatName> { StatName.Clothing, StatName.Supplies });
         }
 
