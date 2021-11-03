@@ -1,58 +1,42 @@
 ﻿using DadSimulator.Animation;
-using DadSimulator.GraphicObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 
 namespace DadSimulator.Interactable
 {
-    public class ChangingTable : IInteractable, IGraphicObject
+    public class ChangingTable : AnimatedInteractableBase
     {
-        private readonly Spritesheet m_spritesheet;
 
         public ChangingTable(Spritesheet spritesheet, Vector2 position, Vector2 interactablePosition, Stats stats)
+            : base(spritesheet, position, interactablePosition, stats)
         {
-            m_spritesheet = spritesheet;
         }
 
-        public void Draw(SpriteBatch batch)
+        public override void ExecuteCommand()
         {
-            throw new NotImplementedException();
+            
         }
 
-        public void ExecuteCommand()
+        public override string GetCommand()
         {
-            throw new NotImplementedException();
+            return "Change diapers/clothes";
         }
 
-        public string GetCommand()
+        public override string GetName()
         {
-            throw new NotImplementedException();
+            return "Changing table";
         }
 
-        public string GetName()
+        public override string GetState()
         {
-            throw new NotImplementedException();
+            return m_stats.RequestFormated(new List<StatName> { StatName.Clothing, StatName.Supplies });
         }
 
-        public Vector2 GetPosition()
+        public override void Update(double elapsedTime)
         {
-            throw new NotImplementedException();
-        }
-
-        public string GetState()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Initialize()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(double elapsedTime)
-        {
-            throw new NotImplementedException();
+            base.Update(elapsedTime);
         }
     }
 }

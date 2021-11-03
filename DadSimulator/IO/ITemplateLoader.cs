@@ -8,7 +8,7 @@ namespace DadSimulator.IO
         Test, TestTextureTransparency, 
         Character, 
         LevelGrassBackground, LevelFloor, LevelInterior, LevelInteriorBackground, LevelWalls, LevelWindowsImages,
-        WashingMachine
+        WashingMachine, ChangingTable
     }
 
     public interface ITemplateLoader

@@ -87,6 +87,12 @@ namespace DadSimulator
                 new Vector2(592, 480), new Vector2(600, 488), 
                 m_gameTimer, gameStats);
 
+            var changingTable = new ChangingTable(
+                new Spritesheet(LoadTemplate(Templates.ChangingTable), 1,
+                new List<string>() { "stash-100", "stash-75", "stash-50", "stash-25", "stash-0" }),
+                new Vector2(47 * 16, 41 * 16), new Vector2(47 * 16 + 8, 41 * 16 + 8),
+                gameStats);
+
             m_gameObjects.Add(levelBackgroundGrass);
             m_gameObjects.Add(levelFloor);
             m_gameObjects.Add(levelInteriorBackground);
@@ -94,9 +100,11 @@ namespace DadSimulator
             m_gameObjects.Add(levelWalls);
             m_gameObjects.Add(levelWindowsImages);
             m_gameObjects.Add(washMaschine);
+            m_gameObjects.Add(changingTable);
             m_gameObjects.Add(player);
 
             m_interactables.Add(washMaschine);
+            m_interactables.Add(changingTable);
 
             m_camera.Follow(player);
             // TODO: use this.Content to load your game content here
@@ -178,6 +186,9 @@ namespace DadSimulator
                     break;
                 case Templates.WashingMachine:
                     stringName = "Interactables/washing-machine";
+                    break;
+                case Templates.ChangingTable:
+                    stringName = "Interactables/changing-table";
                     break;
                 default:
                     break;
